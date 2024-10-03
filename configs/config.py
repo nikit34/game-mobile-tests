@@ -16,4 +16,8 @@ class Config:
 
     @classmethod
     def get_package_name(cls):
-        return cls.load_config('config.json')['package_name']
+        return cls.load_config('desired_caps.json')['appium:appPackage']
+
+    @classmethod
+    def get_desired_caps(cls):
+        return cls.load_config('desired_caps.json')
