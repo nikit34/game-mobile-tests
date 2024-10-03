@@ -12,3 +12,15 @@
   - Если компонент принадлежит только одному экрану, он будет помещён в папку `screens/<НазваниеЭкранаScreen>/components/*.py`
   - Если компонент встречается на разных экранах, он будет находиться в папке `components/` у корня репозитория, по принципу `components/*.py`
   - Название компонента пишется по шаблону `<НазваниеКомпонентаComponent>.py`
+
+### Конфигурация для подключения к приложению через Appium
+#### Android
+```commandline
+{
+  "platformName": "Android",
+  "appium:deviceName": "emulator-5554",
+  "appium:automationName": "UiAutomator2",
+  "appium:appPackage": "com.playrix.township",
+  "appium:appActivity": "com.playrix.township.Launcher"
+}
+```
