@@ -1,4 +1,4 @@
-from configs.config import Config
+from configs._config import Config
 
 
 class WaitingConfig(Config):
