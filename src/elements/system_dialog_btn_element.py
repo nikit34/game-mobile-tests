@@ -1,10 +1,10 @@
 from appium.webdriver.common.appiumby import AppiumBy
 
-from configs.config import Config
+from configs.desired_caps_config import DesiredCapsConfig
 
 
 class SystemDialogBtnElement:
-    BUTTON_LOCATOR = (AppiumBy.ID, Config.get_package_name() + ":id/system_dialog_button")
+    BUTTON_LOCATOR = (AppiumBy.ID, DesiredCapsConfig.get_package_name() + ":id/system_dialog_button")
 
     def __init__(self, driver, button_index):
         self.driver = driver

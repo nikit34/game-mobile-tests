@@ -1,0 +1,8 @@
+{
+  "platformName": "Android",
+  "appium:deviceName": "emulator-5554",
+  "appium:noReset": false,
+  "appium:automationName": "UiAutomator2",
+  "appium:appPackage": "com.playrix.township",
+  "appium:appActivity": "com.playrix.township.Launcher"
+}
