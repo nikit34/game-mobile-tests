@@ -12,7 +12,7 @@ from configs.waiting_config import WaitingConfig
 def driver():
     desired_caps = DesiredCapsConfig.get_desired_caps()
     capabilities_options = UiAutomator2Options().load_capabilities(desired_caps)
-    driver = webdriver.Remote("http://localhost:4723", options=capabilities_options)
+    driver = webdriver.Remote('http://' + AppiumConfig.get_host() + ':' + str(AppiumConfig.get_port()), options=capabilities_options)
     implicitly_timeout = WaitingConfig.get_implicitly_timeout()
     driver.implicitly_wait(implicitly_timeout)
     yield driver
