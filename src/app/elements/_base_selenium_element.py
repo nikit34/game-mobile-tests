@@ -1,7 +1,7 @@
 from selenium.common import NoSuchElementException
 
 
-class BaseElement:
+class BaseSeleniumElement:
     def __init__(self, driver, locator):
         self.driver = driver
         self.locator = locator
