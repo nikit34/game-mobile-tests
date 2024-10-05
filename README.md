@@ -28,3 +28,14 @@
   "appium:appActivity": "com.playrix.township.Launcher"
 }
 ```
+#### iOS
+```commandline
+{
+  "platformName": "iOS",
+  "appium:udid": "00008030-000E65521444202E",
+  "appium:fullReset": true,
+  "appium:automationName": "XCUITest",
+  "appium:bundleId": "com.playrix.township-ios",
+  "appium:app": "Downloads/township.ipa"
+}
+```
