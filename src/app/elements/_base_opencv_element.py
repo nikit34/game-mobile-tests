@@ -1,7 +1,7 @@
 from src.actions_manager import ActionsManager
 
 
-class BaseElement:
+class BaseOpencvElement:
     def __init__(self, driver):
         self.driver = driver
 

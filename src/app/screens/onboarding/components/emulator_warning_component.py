@@ -1,7 +1,7 @@
-from src.app.elements._base_element import BaseElement
+from src.app.elements._base_opencv_element import BaseOpencvElement
 
 
-class EmulatorWarningComponent(BaseElement):
+class EmulatorWarningComponent(BaseOpencvElement):
     KEEP_USING_EMULATOR_BTN = (562, 413, 737, 454)
 
     def __init__(self, driver):
