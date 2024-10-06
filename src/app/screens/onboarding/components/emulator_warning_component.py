@@ -1,4 +1,4 @@
-from src.app.elements._base_opencv_element import BaseOpencvElement
+from src.app.elements._base_elements._base_opencv_element import BaseOpencvElement
 
 
 class EmulatorWarningComponent(BaseOpencvElement):

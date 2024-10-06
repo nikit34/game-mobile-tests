@@ -1,6 +1,6 @@
 from appium.webdriver.common.appiumby import AppiumBy
 
-from src.app.elements._base_selenium_element import BaseSeleniumElement
+from src.app.elements._base_elements._base_selenium_element import BaseSeleniumElement
 
 
 class GameCenterComponent(BaseSeleniumElement):
