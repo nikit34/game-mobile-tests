@@ -9,8 +9,8 @@ from pathlib import Path
 
 class Image:
     def __init__(self, image=None, path_image=None, flags=cv2.IMREAD_GRAYSCALE):
-        self.cv_image = self._load_image(image, path_image, flags)
         self.current_dir = os.path.dirname(os.path.abspath(__file__))
+        self.cv_image = self._load_image(image, path_image, flags)
 
     def _load_image(self, image, path_image, flags):
         if isinstance(image, str):
