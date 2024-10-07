@@ -12,7 +12,11 @@ class ImageDetector:
             clahe_grid_size=ImagesDetectorConfig.get_clahe_grid_size(),
             min_color_similarity=ImagesDetectorConfig.get_min_color_similarity(),
             min_cluster_area=ImagesDetectorConfig.get_min_cluster_area(),
-            min_samples=ImagesDetectorConfig.get_min_samples()
+            min_samples=ImagesDetectorConfig.get_min_samples(),
+            flann_trees=5,
+            flann_checks=50,
+            good_match_threshold=0.75,
+            ransac_threshold=5.0
     ):
         self.eps = eps
         self.clahe_clip_limit = clahe_clip_limit
@@ -20,6 +24,10 @@ class ImageDetector:
         self.min_color_similarity = min_color_similarity
         self.min_cluster_area = min_cluster_area
         self.min_samples = min_samples
+        self.flann_trees = flann_trees
+        self.flann_checks = flann_checks
+        self.good_match_threshold = good_match_threshold
+        self.ransac_threshold = ransac_threshold
 
     def apply_clahe(self, image):
         clahe = cv2.createCLAHE(clipLimit=self.clahe_clip_limit, tileGridSize=self.clahe_grid_size)
@@ -47,19 +55,18 @@ class ImageDetector:
             return [], None
         return keypoints, descriptors
 
-    @staticmethod
-    def match_descriptors(des1, des2):
+    def match_descriptors(self, des1, des2):
         if des1 is None or des2 is None:
             return []
         FLANN_INDEX_KDTREE = 1
-        index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
-        search_params = dict(checks=50)
+        index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=self.flann_trees)
+        search_params = dict(checks=self.flann_checks)
         flann = cv2.FlannBasedMatcher(index_params, search_params)
         matches = flann.knnMatch(des1, des2, k=2)
 
         good_matches = []
         for m, n in matches:
-            if m.distance < 0.75 * n.distance:
+            if m.distance < self.good_match_threshold * n.distance:
                 good_matches.append(m)
         return good_matches
 
@@ -130,7 +137,7 @@ class ImageDetector:
         src_pts = np.float32([kp1[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)
         dst_pts = np.float32([kp2[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
 
-        M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+        M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, self.ransac_threshold)
         matchesMask = mask.ravel().tolist()
 
         good_matches = [m for i, m in enumerate(matches) if matchesMask[i] == 1]
