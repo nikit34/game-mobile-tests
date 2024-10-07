@@ -3,17 +3,19 @@ from time import sleep
 from pytest import mark
 
 from src.actions_manager import ActionsManager
+from src.app.components.field_component import FieldComponent
 from src.app.screens.onboarding.components.game_center_component import GameCenterComponent
 from src.app.elements.system_dialog_btn_element import SystemDialogBtnElement
 from src.environment_manager import EnvironmentManager
 from src.image import Image
-from src.image_detector import ImageDetector
 from src.screenshot import Screenshot
+from tests.test_base import TestBase
+from tests.conftest import driver, appium_service
 
 
-@mark.skip
-@mark.usefixtures('driver', 'appium_service')
-class TestOnboarding:
+@mark.usefixtures('appium_service', 'driver')
+class TestOnboarding(TestBase):
+
     def test_first_action(self, driver):
         EnvironmentManager.execute_ios_callback(
             lambda: GameCenterComponent(driver, GameCenterComponent.CLOSE_BTN).is_visible().click()
@@ -29,13 +31,15 @@ class TestOnboarding:
         sleep(2)
 
         screenshot = Screenshot(driver)
+
         screenshot_img = Image(image=screenshot.get_screenshot())
-
-        yellow_arrow_down_img = Image(path_image="app/elements/img/yellow_arrow_down.png")
-        coordinates = ImageDetector.get_coordinates_objects(screenshot_img, yellow_arrow_down_img)
-
         empty_field_1_img = Image(path_image="app/elements/img/empty_field_1.png")
-        coordinates = ImageDetector.get_coordinates_objects(screenshot_img, empty_field_1_img)
+        detected_clusters = self.image_detector.get_coordinates_objects(screenshot_img, empty_field_1_img)
+        expected_clusters = FieldComponent.COORDINATES_FIELD_1
+        self.check_clusters(detected_clusters, expected_clusters)
 
+        screenshot_img = Image(image=screenshot.get_screenshot())
         empty_field_2_img = Image(path_image="app/elements/img/empty_field_2.png")
-        coordinates = ImageDetector.get_coordinates_objects(screenshot_img, empty_field_2_img)
+        detected_clusters = self.image_detector.get_coordinates_objects(screenshot_img, empty_field_2_img)
+        expected_clusters = FieldComponent.COORDINATES_FIELD_2
+        self.check_clusters(detected_clusters, expected_clusters)

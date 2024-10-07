@@ -4,5 +4,5 @@
   "appium:fullReset": true,
   "appium:automationName": "XCUITest",
   "appium:bundleId": "com.playrix.township-ios",
-  "appium:app": "Downloads/township.ipa"
+  "appium:app": "../../targets/township.ipa"
 }

@@ -2,6 +2,7 @@ import os
 
 from _pytest.fixtures import fixture
 from appium.options.android import UiAutomator2Options
+from appium.options.ios import XCUITestOptions
 from appium import webdriver
 from appium.webdriver.appium_service import AppiumService
 
@@ -16,6 +17,7 @@ from src.path_creator import PathCreator
 def driver():
     desired_caps = DesiredCapsConfig.get_desired_caps()
     path_creator = PathCreator()
+
     EnvironmentManager.execute_ios_callback(lambda: (
         desired_caps.update({
             'appium:usePrebuiltWDA': True,
@@ -27,10 +29,17 @@ def driver():
         os.path.expanduser("~/Library/Developer/Xcode/DerivedData/"),
         r"WebDriverAgent-[a-z]+"
     ) else None)
-    capabilities_options = UiAutomator2Options().load_capabilities(desired_caps)
+
+    capabilities_options = EnvironmentManager.execute_platform_specific_callback(
+        lambda: UiAutomator2Options(),
+        lambda: XCUITestOptions(),
+    ).load_capabilities(desired_caps)
+
     driver = webdriver.Remote('http://' + AppiumConfig.get_host() + ':' + str(AppiumConfig.get_port()), options=capabilities_options)
+
     implicitly_timeout = WaitingConfig.get_implicitly_timeout()
     driver.implicitly_wait(implicitly_timeout)
+
     yield driver
     driver.quit()
 
@@ -41,9 +50,11 @@ def appium_service():
     host = AppiumConfig.get_host()
     port = AppiumConfig.get_port()
     timeout = AppiumConfig.get_timeout()
+
     service.start(
         args=['--address', host, '-p', str(port)],
         timeout_ms=timeout,
     )
+
     yield service
     service.stop()
