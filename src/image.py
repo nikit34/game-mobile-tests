@@ -6,14 +6,35 @@ import numpy as np
 import cv2
 from pathlib import Path
 
+from configs.device_appium_config import DeviceAppiumConfig
 from src.images_manager import ImagesManager
 
 
+def resize(func):
+    def wrapper(self, *args, **kwargs):
+        image = func(self, *args, **kwargs)
+        if image is None:
+            raise ValueError("No image loaded to resize")
+
+        if self.resize_image:
+            device_appium_config = DeviceAppiumConfig("iPhone 11")
+
+            target_width, target_height = device_appium_config.get_width(), device_appium_config.get_height()
+            current_height, current_width = image.shape[:2]
+
+            if current_width != target_width or current_height != target_height:
+                image = cv2.resize(image, (target_width, target_height), interpolation=cv2.INTER_AREA)
+        return image
+    return wrapper
+
+
 class Image(ImagesManager):
-    def __init__(self, image=None, path_image=None, flags=cv2.IMREAD_GRAYSCALE):
+    def __init__(self, image=None, path_image=None, flags=cv2.IMREAD_GRAYSCALE, resize_image=False):
         super().__init__()
+        self.resize_image = resize_image  # Флаг для изменения размера
         self.cv_image = self._load_image(image, path_image, flags)
 
+    @resize
     def _load_image(self, image, path_image, flags):
         if isinstance(image, str):
             return self._decode_base64_image(image, flags)
@@ -36,3 +57,4 @@ class Image(ImagesManager):
             raise ValueError("No image loaded to save")
         full_path = str(os.path.join(self.current_dir, "temporary_images/", name_image + "-" + str(datetime.now()) + ".png"))
         cv2.imwrite(full_path, self.cv_image)
+
