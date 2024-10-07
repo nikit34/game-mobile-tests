@@ -6,7 +6,7 @@ import numpy as np
 import cv2
 from pathlib import Path
 
-from configs.device_appium_config import DeviceAppiumConfig
+from configs.device_config import DeviceConfig
 from src.images_manager import ImagesManager
 
 
@@ -17,7 +17,7 @@ def resize(func):
             raise ValueError("No image loaded to resize")
 
         if self.resize_image:
-            device_appium_config = DeviceAppiumConfig("iPhone 11")
+            device_appium_config = DeviceConfig("iPhone 11")
 
             target_width, target_height = device_appium_config.get_width(), device_appium_config.get_height()
             current_height, current_width = image.shape[:2]

@@ -1,8 +1,8 @@
 from configs._config import Config
 
 
-class DeviceAppiumConfig(Config):
-    CONFIG = 'json/device_appium.json'
+class DeviceConfig(Config):
+    CONFIG = 'json/device.json'
 
     def __init__(self, device):
         self.device = self.choice_device(device)
