@@ -1,16 +1,10 @@
 import pytest
 from src.app.components.field_component import FieldComponent
 from src.image import Image
-from src.images_manager import ImagesManager
 from tests.test_base import TestBase
 
 
 class TestDetection(TestBase):
-    @staticmethod
-    def setup_method():
-        images_manager = ImagesManager()
-        images_manager.remove("temporary_images")
-
     @pytest.mark.parametrize("field_image_path, expected_clusters", [
         ("app/elements/img/empty_field_1.png", FieldComponent.COORDINATES_FIELD_1),
         ("app/elements/img/empty_field_2.png", FieldComponent.COORDINATES_FIELD_2)

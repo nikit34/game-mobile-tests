@@ -1,10 +1,14 @@
 from configs.images_checker_config import ImagesCheckerConfig
 from src.image_detector import ImageDetector
+from src.images_manager import ImagesManager
 
 
 class TestBase:
     @classmethod
     def setup_class(cls):
+        images_manager = ImagesManager()
+        images_manager.remove("temporary_images")
+
         cls.tolerance = ImagesCheckerConfig.get_tolerance()
         cls.image_detector = ImageDetector()
 
