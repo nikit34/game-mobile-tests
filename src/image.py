@@ -6,10 +6,12 @@ import numpy as np
 import cv2
 from pathlib import Path
 
+from src.images_manager import ImagesManager
 
-class Image:
+
+class Image(ImagesManager):
     def __init__(self, image=None, path_image=None, flags=cv2.IMREAD_GRAYSCALE):
-        self.current_dir = os.path.dirname(os.path.abspath(__file__))
+        super().__init__()
         self.cv_image = self._load_image(image, path_image, flags)
 
     def _load_image(self, image, path_image, flags):
@@ -29,7 +31,7 @@ class Image:
         image_array = np.frombuffer(decoded_image, dtype=np.uint8)
         return cv2.imdecode(image_array, flags=flags)
 
-    def save_image(self, name_image):
+    def save(self, name_image):
         if self.cv_image is None:
             raise ValueError("No image loaded to save")
         full_path = str(os.path.join(self.current_dir, "temporary_images/", name_image + "-" + str(datetime.now()) + ".png"))

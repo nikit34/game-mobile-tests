@@ -1,13 +1,15 @@
 from datetime import datetime
 import os
 
+from src.images_manager import ImagesManager
 
-class ScreenshotsManager:
+
+class Screenshot(ImagesManager):
     def __init__(self, driver):
         self.driver = driver
-        self.current_dir = os.path.dirname(os.path.abspath(__file__))
+        super().__init__()
 
-    def save_screenshot(self, screenshot_name):
+    def save(self, screenshot_name):
         file_path = os.path.join(self.current_dir, 'screenshots/', screenshot_name + "-" + str(datetime.now()) + ".png")
         self.driver.save_screenshot(file_path)
 
