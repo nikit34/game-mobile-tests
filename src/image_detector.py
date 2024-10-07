@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.cluster import DBSCAN
 from configs.images_detector_config import ImagesDetectorConfig
 
+
 class ImageDetector:
     def __init__(
             self,
@@ -135,42 +136,6 @@ class ImageDetector:
         good_matches = [m for i, m in enumerate(matches) if matchesMask[i] == 1]
         return M, good_matches
 
-    def process_clusters_with_ransac(self, kp1, kp2, good_matches, coordinates, cluster_labels):
-        cluster_bounds = []
-        unique_labels = set(cluster_labels) - {-1}
-
-        coordinates = np.array(coordinates)
-
-        for label in unique_labels:
-            cluster_coords = coordinates[cluster_labels == label]
-            if len(cluster_coords) < 4:
-                continue
-
-            src_pts = []
-            dst_pts = []
-
-            for m in good_matches:
-                if (0 <= m.trainIdx < len(cluster_labels)) and (cluster_labels[m.trainIdx] == label):
-                    if m.trainIdx < len(kp2) and m.queryIdx < len(kp1):
-                        src_pts.append(kp1[m.queryIdx].pt)
-                        dst_pts.append(kp2[m.trainIdx].pt)
-
-            if len(src_pts) >= 4 and len(dst_pts) >= 4:
-                src_pts = np.float32(src_pts).reshape(-1, 1, 2)
-                dst_pts = np.float32(dst_pts).reshape(-1, 1, 2)
-
-                M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
-                if M is not None:
-                    x_min, y_min = np.min(cluster_coords, axis=0)
-                    x_max, y_max = np.max(cluster_coords, axis=0)
-                    width = x_max - x_min
-                    height = y_max - y_min
-                    area = width * height
-                    if area >= self.min_cluster_area:
-                        cluster_bounds.append(((int(x_min), int(y_min)), (int(x_max), int(y_max))))
-
-        return cluster_bounds
-
     def get_coordinates_objects(self, original_img, template_img):
         original_img.cv_image = self.convert_to_color_if_needed(original_img.cv_image)
         template_img.cv_image = self.convert_to_color_if_needed(template_img.cv_image)
@@ -191,9 +156,7 @@ class ImageDetector:
 
         coordinates = self.extract_coordinates_from_matches(matches, kp2)
         cluster_labels = self.perform_clustering(coordinates)
-
-        M, good_matches = self.apply_ransac(kp1, kp2, matches)
-        cluster_bounds = self.process_clusters_with_ransac(kp1, kp2, good_matches, coordinates, cluster_labels)
+        cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
 
         self.draw_clusters_and_points(original_img.cv_image, cluster_bounds, coordinates, cluster_labels)
 
