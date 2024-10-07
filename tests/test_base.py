@@ -26,3 +26,5 @@ class TestBase:
     def check_clusters(self, detected_clusters, expected_clusters):
         for detected, expected in zip(detected_clusters, expected_clusters):
             assert self.is_within_bounds(detected, expected), "Cluster " + str(detected) + " is out of bounds " + str(expected)
+        else:
+            raise AssertionError("No clusters were found")
