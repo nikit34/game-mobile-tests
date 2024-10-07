@@ -33,11 +33,16 @@ class ImageDetector:
     @staticmethod
     def compute_sift_keypoints_and_descriptors(gray_image):
         sift = cv2.SIFT_create()
-        return sift.detectAndCompute(gray_image, None)
+        keypoints, descriptors = sift.detectAndCompute(gray_image, None)
+        if descriptors is None:
+            return [], None
+        return keypoints, descriptors
 
     @staticmethod
     def match_descriptors(des1, des2):
-        bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
+        if des1 is None or des2 is None:
+            return []
+        bf = cv2.BFMatcher(cv2.NORM_L2)
         matches = bf.match(des1, des2)
         return sorted(matches, key=lambda x: x.distance)
 
@@ -95,7 +100,6 @@ class ImageDetector:
         for x, y in noise_coords:
             cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
 
-
     @staticmethod
     def convert_to_color_if_needed(image):
         if image.ndim == 2:
@@ -115,8 +119,14 @@ class ImageDetector:
         kp1, des1 = self.compute_sift_keypoints_and_descriptors(gray_template)
         kp2, des2 = self.compute_sift_keypoints_and_descriptors(gray_original)
 
+        if des1 is None or des2 is None:
+            return []
+
         matches = self.match_descriptors(des1, des2)
         coordinates = self.extract_coordinates_from_matches(matches, kp2)
+
+        if not coordinates:
+            return []
 
         cluster_labels = self.perform_clustering(coordinates)
         cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
@@ -133,3 +143,4 @@ class ImageDetector:
             return cluster_bounds
         else:
             return []
+
