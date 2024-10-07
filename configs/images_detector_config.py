@@ -23,3 +23,7 @@ class ImagesDetectorConfig(Config):
     @classmethod
     def get_min_cluster_area(cls):
         return cls.load_config(cls.CONFIG).get('min_cluster_area')
+
+    @classmethod
+    def get_min_samples(cls):
+        return cls.load_config(cls.CONFIG).get('min_samples')
