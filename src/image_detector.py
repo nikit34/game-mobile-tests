@@ -11,12 +11,14 @@ class ImageDetector:
             eps=ImagesDetectorConfig.get_eps(),
             clahe_clip_limit=ImagesDetectorConfig.get_clahe_clip_limit(),
             clahe_grid_size=ImagesDetectorConfig.get_clahe_grid_size(),
-            min_color_similarity=ImagesDetectorConfig.get_min_color_similarity()
+            min_color_similarity=ImagesDetectorConfig.get_min_color_similarity(),
+            min_cluster_area=ImagesDetectorConfig.get_min_cluster_area()
     ):
         self.eps = eps
         self.clahe_clip_limit = clahe_clip_limit
         self.clahe_grid_size = clahe_grid_size
         self.min_color_similarity = min_color_similarity
+        self.min_cluster_area = min_cluster_area
 
     @staticmethod
     def apply_clahe(image, clip_limit, grid_size):
@@ -60,7 +62,7 @@ class ImageDetector:
             return np.array([]), []
 
     @staticmethod
-    def get_cluster_bounds(coordinates, cluster_labels):
+    def get_cluster_bounds(coordinates, cluster_labels, min_area):
         cluster_bounds = []
         unique_labels = set(cluster_labels) - {-1}
 
@@ -70,7 +72,12 @@ class ImageDetector:
             cluster_points = coordinates[cluster_labels == label]
             x_min, y_min = np.min(cluster_points, axis=0)
             x_max, y_max = np.max(cluster_points, axis=0)
-            cluster_bounds.append(((int(x_min), int(y_min)), (int(x_max), int(y_max))))
+            width = x_max - x_min
+            height = y_max - y_min
+            area = width * height
+
+            if area >= min_area:
+                cluster_bounds.append(((int(x_min), int(y_min)), (int(x_max), int(y_max))))
 
         return cluster_bounds
 
@@ -105,7 +112,7 @@ class ImageDetector:
         coordinates = self.extract_coordinates_from_matches(matches, kp2)
 
         clustered_coords, cluster_labels = self.perform_clustering(coordinates, self.eps)
-        cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
+        cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels, self.min_cluster_area)
 
         self.draw_clusters_and_points(original_img.cv_image, cluster_bounds, clustered_coords)
 
