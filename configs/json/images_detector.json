@@ -1,6 +1,6 @@
 {
-  "eps": 30,
+  "eps": 20,
   "clahe_clip_limit": 7.0,
-  "clahe_grid_size": [8, 8],
+  "clahe_grid_size": [16, 16],
   "min_color_similarity": 0.2
 }
