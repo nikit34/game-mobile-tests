@@ -10,7 +10,7 @@ class TestDetection(TestBase):
         ("app/elements/img/empty_field_2.png", FieldComponent.COORDINATES_FIELD_2)
     ])
     def test_count_clusters(self, field_image_path, expected_clusters):
-        original_img = Image(path_image="screenshots/test_detection.jpeg", resize_image=True)
+        original_img = Image(path_image="screenshots/test_detection.png", resize_image=True)
         empty_field_img = Image(path_image=field_image_path)
 
         detected_clusters = self.image_detector.get_coordinates_objects(original_img, empty_field_img)
@@ -22,7 +22,7 @@ class TestDetection(TestBase):
         ("app/elements/img/empty_field_2.png", FieldComponent.COORDINATES_FIELD_2)
     ])
     def test_cluster_within_bounds(self, field_image_path, expected_clusters):
-        original_img = Image(path_image="screenshots/test_detection.jpeg", resize_image=True)
+        original_img = Image(path_image="screenshots/test_detection.png", resize_image=True)
         empty_field_img = Image(path_image=field_image_path)
 
         detected_clusters = self.image_detector.get_coordinates_objects(original_img, empty_field_img)
