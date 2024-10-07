@@ -20,9 +20,8 @@ class ImageDetector:
         self.min_color_similarity = min_color_similarity
         self.min_cluster_area = min_cluster_area
 
-    @staticmethod
-    def apply_clahe(image, clip_limit, grid_size):
-        clahe = cv2.createCLAHE(clipLimit=clip_limit, tileGridSize=grid_size)
+    def apply_clahe(self, image):
+        clahe = cv2.createCLAHE(clipLimit=self.clahe_clip_limit, tileGridSize=self.clahe_grid_size)
         return clahe.apply(image)
 
     @staticmethod
@@ -50,19 +49,17 @@ class ImageDetector:
             coordinates.append((int(x), int(y)))
         return coordinates
 
-    @staticmethod
-    def perform_clustering(coordinates, eps):
+    def perform_clustering(self, coordinates):
         if len(coordinates) > 0:
             coordinates = np.array(coordinates)
-            clustering = DBSCAN(eps=eps).fit(coordinates)
+            clustering = DBSCAN(eps=self.eps).fit(coordinates)
             cluster_labels = clustering.labels_
             clustered_coords = coordinates[cluster_labels != -1]
             return clustered_coords, cluster_labels
         else:
             return np.array([]), []
 
-    @staticmethod
-    def get_cluster_bounds(coordinates, cluster_labels, min_area):
+    def get_cluster_bounds(self, coordinates, cluster_labels):
         cluster_bounds = []
         unique_labels = set(cluster_labels) - {-1}
 
@@ -76,15 +73,18 @@ class ImageDetector:
             height = y_max - y_min
             area = width * height
 
-            if area >= min_area:
+            if area >= self.min_cluster_area:
                 cluster_bounds.append(((int(x_min), int(y_min)), (int(x_max), int(y_max))))
 
         return cluster_bounds
 
     @staticmethod
     def draw_clusters_and_points(image, cluster_bounds, clustered_coords):
-        for (x_min, y_min), (x_max, y_max) in cluster_bounds:
+        for i, ((x_min, y_min), (x_max, y_max)) in enumerate(cluster_bounds, start=1):
             cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
+
+            label_position = (x_min, y_min - 10) if y_min - 10 > 0 else (x_min, y_min + 10)
+            cv2.putText(image, str(i), label_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
         for x, y in clustered_coords:
             cv2.circle(image, (x, y), 5, (255, 0, 0), -1)
@@ -102,8 +102,8 @@ class ImageDetector:
         gray_original = cv2.cvtColor(original_img.cv_image, cv2.COLOR_BGR2GRAY)
         gray_template = cv2.cvtColor(template_img.cv_image, cv2.COLOR_BGR2GRAY)
 
-        gray_original = self.apply_clahe(gray_original, self.clahe_clip_limit, self.clahe_grid_size)
-        gray_template = self.apply_clahe(gray_template, self.clahe_clip_limit, self.clahe_grid_size)
+        gray_original = self.apply_clahe(gray_original)
+        gray_template = self.apply_clahe(gray_template)
 
         kp1, des1 = self.compute_sift_keypoints_and_descriptors(gray_template)
         kp2, des2 = self.compute_sift_keypoints_and_descriptors(gray_original)
@@ -111,8 +111,8 @@ class ImageDetector:
         matches = self.match_descriptors(des1, des2)
         coordinates = self.extract_coordinates_from_matches(matches, kp2)
 
-        clustered_coords, cluster_labels = self.perform_clustering(coordinates, self.eps)
-        cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels, self.min_cluster_area)
+        clustered_coords, cluster_labels = self.perform_clustering(coordinates)
+        cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
 
         self.draw_clusters_and_points(original_img.cv_image, cluster_bounds, clustered_coords)
 

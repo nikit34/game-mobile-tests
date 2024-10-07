@@ -3,5 +3,5 @@
   "clahe_clip_limit": 7.0,
   "clahe_grid_size": [8, 8],
   "min_color_similarity": 0.2,
-  "min_cluster_area": 50
+  "min_cluster_area": 200
 }
