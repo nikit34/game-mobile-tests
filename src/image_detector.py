@@ -16,10 +16,6 @@ class ImageDetector:
             min_samples=ImagesDetectorConfig.get_min_samples(),
             ransac=True,
             ransac_threshold=ImagesDetectorConfig.get_ransac_threshold(),
-            fast_clustering=False,
-            flann_trees=5,
-            flann_checks=50,
-            good_match_threshold=0.75,
     ):
         self.n_octave_layers = n_octave_layers
         self.contrast_threshold = contrast_threshold
@@ -30,10 +26,6 @@ class ImageDetector:
         self.min_samples = min_samples
         self.ransac = ransac
         self.ransac_threshold = ransac_threshold
-        self.fast_clustering = fast_clustering
-        self.flann_trees = flann_trees
-        self.flann_checks = flann_checks
-        self.good_match_threshold = good_match_threshold
 
     def apply_clahe(self, image):
         clahe = cv2.createCLAHE(clipLimit=self.clahe_clip_limit, tileGridSize=self.clahe_grid_size)
@@ -62,25 +54,10 @@ class ImageDetector:
         return keypoints, descriptors
 
     @staticmethod
-    def match_descriptors_brute_force(des1, des2):
+    def match_descriptors(des1, des2):
         bf = cv2.BFMatcher(cv2.NORM_L2)
         matches = bf.match(des1, des2)
         return sorted(matches, key=lambda x: x.distance)
-
-    def match_descriptors_flann(self, des1, des2):
-        if des1 is None or des2 is None:
-            return []
-        FLANN_INDEX_KDTREE = 1
-        index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=self.flann_trees)
-        search_params = dict(checks=self.flann_checks)
-        flann = cv2.FlannBasedMatcher(index_params, search_params)
-        matches = flann.knnMatch(des1, des2, k=2)
-
-        good_matches = []
-        for m, n in matches:
-            if m.distance < self.good_match_threshold * n.distance:
-                good_matches.append(m)
-        return good_matches
 
     @staticmethod
     def extract_coordinates_from_matches(matches, keypoints):
@@ -187,10 +164,7 @@ class ImageDetector:
         kp1, des1 = self.compute_sift_keypoints_and_descriptors(gray_template)
         kp2, des2 = self.compute_sift_keypoints_and_descriptors(gray_original)
 
-        if self.fast_clustering:
-            matches = self.match_descriptors_flann(des1, des2)
-        else:
-            matches = self.match_descriptors_brute_force(des1, des2)
+        matches = self.match_descriptors(des1, des2)
 
         coordinates = self.extract_coordinates_from_matches(matches, kp2)
         cluster_labels = self.perform_clustering(coordinates)
