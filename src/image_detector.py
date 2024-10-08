@@ -13,6 +13,7 @@ class ImageDetector:
             min_color_similarity=ImagesDetectorConfig.get_min_color_similarity(),
             min_cluster_area=ImagesDetectorConfig.get_min_cluster_area(),
             min_samples=ImagesDetectorConfig.get_min_samples(),
+            ransac=True,
             ransac_threshold=ImagesDetectorConfig.get_ransac_threshold(),
             fast_clustering=False,
             flann_trees=5,
@@ -25,6 +26,7 @@ class ImageDetector:
         self.min_color_similarity = min_color_similarity
         self.min_cluster_area = min_cluster_area
         self.min_samples = min_samples
+        self.ransac = ransac
         self.ransac_threshold = ransac_threshold
         self.fast_clustering = fast_clustering
         self.flann_trees = flann_trees
@@ -86,10 +88,12 @@ class ImageDetector:
             coordinates.append((int(x), int(y)))
         return coordinates
 
-    def perform_clustering(self, coordinates):
+    def perform_clustering(self, coordinates, custom_min_samples=None):
         if len(coordinates) > 0:
             coordinates = np.array(coordinates)
-            clustering = DBSCAN(eps=self.eps, min_samples=self.min_samples).fit(coordinates)
+            if custom_min_samples is None:
+                custom_min_samples = self.min_samples
+            clustering = DBSCAN(eps=self.eps, min_samples=custom_min_samples).fit(coordinates)
             cluster_labels = clustering.labels_
             return cluster_labels
         else:
@@ -189,10 +193,11 @@ class ImageDetector:
         coordinates = self.extract_coordinates_from_matches(matches, kp2)
         cluster_labels = self.perform_clustering(coordinates)
 
-        good_matches = self.get_good_matches_from_clusters(kp1, kp2, matches, cluster_labels)
+        if self.ransac:
+            good_matches = self.get_good_matches_from_clusters(kp1, kp2, matches, cluster_labels)
+            coordinates = self.extract_coordinates_from_matches(good_matches, kp2)
+            cluster_labels = self.perform_clustering(coordinates, custom_min_samples=1)
 
-        coordinates = self.extract_coordinates_from_matches(good_matches, kp2)
-        cluster_labels = self.perform_clustering(coordinates)
         cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
 
         self.draw_clusters_and_points(original_img.cv_image, cluster_bounds, coordinates, cluster_labels)

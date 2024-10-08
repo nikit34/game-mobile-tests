@@ -5,5 +5,5 @@
   "min_color_similarity": 0.2,
   "min_cluster_area": 400,
   "min_samples": 5,
-  "ransac_threshold": 150.0
+  "ransac_threshold": 10.0
 }
