@@ -152,6 +152,19 @@ class ImageDetector:
             return []
         return good_matches
 
+    def get_good_matches_from_clusters(self, kp1, kp2, matches, cluster_labels):
+        all_good_matches = []
+        for cluster in set(cluster_labels):
+            if cluster == -1:
+                continue
+
+            cluster_matches = [m for i, m in enumerate(matches) if cluster_labels[i] == cluster]
+
+            good_matches = self.apply_ransac(kp1, kp2, cluster_matches)
+            all_good_matches.extend(good_matches)
+
+        return all_good_matches
+
     def get_coordinates_objects(self, original_img, template_img):
         original_img.cv_image = self.convert_to_color_if_needed(original_img.cv_image)
         template_img.cv_image = self.convert_to_color_if_needed(template_img.cv_image)
@@ -175,20 +188,10 @@ class ImageDetector:
 
         coordinates = self.extract_coordinates_from_matches(matches, kp2)
         cluster_labels = self.perform_clustering(coordinates)
-        cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
 
-        all_good_matches = []
-        for cluster in set(cluster_labels):
-            if cluster == -1:
-                continue
+        good_matches = self.get_good_matches_from_clusters(kp1, kp2, matches, cluster_labels)
 
-            cluster_matches = [m for i, m in enumerate(matches) if cluster_labels[i] == cluster]
-
-            good_matches = self.apply_ransac(kp1, kp2, cluster_matches)
-            all_good_matches.extend(good_matches)
-
-        coordinates = self.extract_coordinates_from_matches(all_good_matches, kp2)
-
+        coordinates = self.extract_coordinates_from_matches(good_matches, kp2)
         cluster_labels = self.perform_clustering(coordinates)
         cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
 
