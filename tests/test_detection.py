@@ -18,10 +18,10 @@ class TestDetection(TestBase):
     ])
     def test_count_clusters(self, name_target, original_image_path, field_image_path, expected_clusters):
         image_detector = ImageDetector(name_target)
-        self.original_img = Image(path_image=original_image_path, resize_image=True)
-        empty_field_img = Image(path_image=field_image_path)
+        original_img = Image(path_image=original_image_path, resize_image=True)
+        template_img = Image(path_image=field_image_path)
 
-        detected_clusters = image_detector.get_coordinates_objects(self.original_img, empty_field_img)
+        detected_clusters = image_detector.get_coordinates_objects(original_img, template_img)
 
         assert len(detected_clusters) == len(expected_clusters), "Number of clusters does not match."
 
@@ -35,9 +35,9 @@ class TestDetection(TestBase):
     ])
     def test_cluster_within_bounds(self, name_target, original_image_path, field_image_path, expected_clusters):
         image_detector = ImageDetector(name_target)
-        self.original_img = Image(path_image=original_image_path, resize_image=True)
-        empty_field_img = Image(path_image=field_image_path)
+        original_img = Image(path_image=original_image_path, resize_image=True)
+        template_img = Image(path_image=field_image_path)
 
-        detected_clusters = image_detector.get_coordinates_objects(self.original_img, empty_field_img)
+        detected_clusters = image_detector.get_coordinates_objects(original_img, template_img)
 
         self.check_clusters(detected_clusters, expected_clusters)

@@ -10,7 +10,7 @@ class TestBase:
 
         cls.tolerance = ImagesCheckerConfig.get_tolerance()
 
-    def is_within_bounds(self, cluster, expected_cluster):
+    def _is_within_bounds(self, cluster, expected_cluster):
         ((x_min1, y_min1), (x_max1, y_max1)) = cluster
         ((x_min2, y_min2), (x_max2, y_max2)) = expected_cluster
 
@@ -29,5 +29,5 @@ class TestBase:
         expected_clusters_sorted = sorted(expected_clusters, key=lambda cluster: cluster[0][0])
 
         for detected, expected in zip(detected_clusters_sorted, expected_clusters_sorted):
-            if not self.is_within_bounds(detected, expected):
+            if not self._is_within_bounds(detected, expected):
                 raise AssertionError("Cluster " + str(detected) + " is out of bounds " + str(expected))
