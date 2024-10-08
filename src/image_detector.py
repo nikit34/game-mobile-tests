@@ -14,7 +14,7 @@ class ImageDetector:
             clahe_grid_size=ImagesDetectorConfig.get_clahe_grid_size(),
             min_cluster_area=ImagesDetectorConfig.get_min_cluster_area(),
             min_samples=ImagesDetectorConfig.get_min_samples(),
-            ransac=True,
+            ransac=ImagesDetectorConfig.get_ransac(),
             ransac_threshold=ImagesDetectorConfig.get_ransac_threshold(),
     ):
         self.n_octave_layers = n_octave_layers

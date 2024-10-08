@@ -33,5 +33,9 @@ class ImagesDetectorConfig(Config):
         return cls.load_config(cls.CONFIG).get('min_samples')
 
     @classmethod
+    def get_ransac(cls):
+        return cls.load_config(cls.CONFIG).get('ransac')
+
+    @classmethod
     def get_ransac_threshold(cls):
         return cls.load_config(cls.CONFIG).get('ransac_threshold')
