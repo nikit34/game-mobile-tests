@@ -93,7 +93,7 @@ class ImageDetector:
             coordinates = np.array(coordinates)
             if custom_min_samples is None:
                 custom_min_samples = self.min_samples
-            clustering = DBSCAN(eps=self.eps, min_samples=custom_min_samples).fit(coordinates)
+            clustering = DBSCAN(eps=self.eps, min_samples=custom_min_samples, algorithm='brute').fit(coordinates)
             cluster_labels = clustering.labels_
             return cluster_labels
         else:
