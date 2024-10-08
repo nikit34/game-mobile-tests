@@ -118,9 +118,13 @@ class ImageDetector:
     def draw_clusters_and_points(image, cluster_bounds, coordinates, cluster_labels):
         coordinates = np.array(coordinates)
 
+        if len(cluster_labels) > len(coordinates):
+            cluster_labels = cluster_labels[:len(coordinates)]
+        elif len(coordinates) > len(cluster_labels):
+            coordinates = coordinates[:len(cluster_labels)]
+
         for i, ((x_min, y_min), (x_max, y_max)) in enumerate(cluster_bounds, start=1):
             cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (255, 0, 0), 2)
-
             label_position = (x_min, y_min - 10) if y_min - 10 > 0 else (x_min, y_min + 10)
             cv2.putText(image, str(i), label_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
@@ -173,11 +177,22 @@ class ImageDetector:
             matches = self.match_descriptors_flann(des1, des2)
         else:
             matches = self.match_descriptors_brute_force(des1, des2)
-        good_matches = self.apply_ransac(kp1, kp2, matches)
 
-        coordinates = self.extract_coordinates_from_matches(good_matches, kp2)
+        coordinates = self.extract_coordinates_from_matches(matches, kp2)
         cluster_labels = self.perform_clustering(coordinates)
         cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
+
+        all_good_matches = []
+        for cluster in set(cluster_labels):
+            if cluster == -1:
+                continue
+
+            cluster_matches = [m for i, m in enumerate(matches) if cluster_labels[i] == cluster]
+
+            good_matches = self.apply_ransac(kp1, kp2, cluster_matches)
+            all_good_matches.extend(good_matches)
+
+        coordinates = self.extract_coordinates_from_matches(all_good_matches, kp2)
 
         self.draw_clusters_and_points(original_img.cv_image, cluster_bounds, coordinates, cluster_labels)
 
