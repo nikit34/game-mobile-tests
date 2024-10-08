@@ -13,10 +13,11 @@ class ImageDetector:
             min_color_similarity=ImagesDetectorConfig.get_min_color_similarity(),
             min_cluster_area=ImagesDetectorConfig.get_min_cluster_area(),
             min_samples=ImagesDetectorConfig.get_min_samples(),
+            ransac_threshold=ImagesDetectorConfig.get_ransac_threshold(),
+            fast_clustering=False,
             flann_trees=5,
             flann_checks=50,
             good_match_threshold=0.75,
-            ransac_threshold=150.0
     ):
         self.eps = eps
         self.clahe_clip_limit = clahe_clip_limit
@@ -24,10 +25,11 @@ class ImageDetector:
         self.min_color_similarity = min_color_similarity
         self.min_cluster_area = min_cluster_area
         self.min_samples = min_samples
+        self.ransac_threshold = ransac_threshold
+        self.fast_clustering = fast_clustering
         self.flann_trees = flann_trees
         self.flann_checks = flann_checks
         self.good_match_threshold = good_match_threshold
-        self.ransac_threshold = ransac_threshold
 
     def apply_clahe(self, image):
         clahe = cv2.createCLAHE(clipLimit=self.clahe_clip_limit, tileGridSize=self.clahe_grid_size)
@@ -55,7 +57,13 @@ class ImageDetector:
             return [], None
         return keypoints, descriptors
 
-    def match_descriptors(self, des1, des2):
+    @staticmethod
+    def match_descriptors_brute_force(des1, des2):
+        bf = cv2.BFMatcher(cv2.NORM_L2)
+        matches = bf.match(des1, des2)
+        return sorted(matches, key=lambda x: x.distance)
+
+    def match_descriptors_flann(self, des1, des2):
         if des1 is None or des2 is None:
             return []
         FLANN_INDEX_KDTREE = 1
@@ -161,7 +169,10 @@ class ImageDetector:
         kp1, des1 = self.compute_sift_keypoints_and_descriptors(gray_template)
         kp2, des2 = self.compute_sift_keypoints_and_descriptors(gray_original)
 
-        matches = self.match_descriptors(des1, des2)
+        if self.fast_clustering:
+            matches = self.match_descriptors_flann(des1, des2)
+        else:
+            matches = self.match_descriptors_brute_force(des1, des2)
         good_matches = self.apply_ransac(kp1, kp2, matches)
 
         coordinates = self.extract_coordinates_from_matches(good_matches, kp2)
