@@ -173,14 +173,14 @@ class ImageDetector:
         return all_good_matches
 
     def get_coordinates_objects(self, original_img, template_img):
-        original = self.convert_to_color_if_needed(original_img.cv_image)
-        template = self.convert_to_color_if_needed(template_img.cv_image)
+        original_img.cv_image = self.convert_to_color_if_needed(original_img.cv_image)
+        template_img.cv_image = self.convert_to_color_if_needed(template_img.cv_image)
 
-        original = self.increase_contrast(original)
-        template = self.increase_contrast(template)
+        original_img.cv_image = self.increase_contrast(original_img.cv_image)
+        template_img.cv_image = self.increase_contrast(template_img.cv_image)
 
-        gray_original = cv2.cvtColor(original, cv2.COLOR_BGR2GRAY)
-        gray_template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+        gray_original = cv2.cvtColor(original_img.cv_image, cv2.COLOR_BGR2GRAY)
+        gray_template = cv2.cvtColor(template_img.cv_image, cv2.COLOR_BGR2GRAY)
 
         gray_original = self.apply_clahe(gray_original)
         gray_template = self.apply_clahe(gray_template)
@@ -203,10 +203,10 @@ class ImageDetector:
 
         cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
 
-        self.draw_clusters_and_points(original, cluster_bounds, coordinates, cluster_labels)
+        self.draw_clusters_and_points(original_img.cv_image, cluster_bounds, coordinates, cluster_labels)
 
-        color_hist_template = self.get_color_histogram(template)
-        color_hist_original = self.get_color_histogram(original)
+        color_hist_template = self.get_color_histogram(template_img.cv_image)
+        color_hist_original = self.get_color_histogram(original_img.cv_image)
         color_similarity = cv2.compareHist(color_hist_template, color_hist_original, cv2.HISTCMP_CORREL)
 
         if color_similarity > self.min_color_similarity:
