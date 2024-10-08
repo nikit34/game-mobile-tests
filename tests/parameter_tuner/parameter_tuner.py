@@ -69,4 +69,4 @@ if __name__ == "__main__":
             error_callback=NEED_ERROR_CALLBACK
         )
 
-        print("Best params: " + str(best_params) + " with error: " + str(best_error) + " for test data: " + str(test_item))
+        print("Best params: \n" + str(best_params) + "\n with error: " + str(best_error) + " for test data: " + str(test_item))
