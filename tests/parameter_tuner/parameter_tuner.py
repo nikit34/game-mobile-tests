@@ -1,17 +1,14 @@
-from datetime import datetime
-from multiprocessing import Event
+from multiprocessing import Pool, Manager, cpu_count
 
 from sklearn.model_selection import ParameterGrid
-from tqdm import tqdm
-
-from src.image import Image
 import json
-from src.image_detector import ImageDetector
-from src.files_manager import FilesManager
-from tests.parameter_tuner.feedbacks import feedback_count_clusters, feedback_cluster_within_bounds
-from tests.parameter_tuner.test_data import test_data
+from datetime import datetime
 
-from joblib import Parallel, delayed
+from src.files_manager import FilesManager
+from src.image import Image
+from src.image_detector import ImageDetector
+from tests.parameter_tuner.feedbacks import feedback_cluster_within_bounds
+from tests.parameter_tuner.test_data import test_data
 
 
 class ParameterTuner:
@@ -20,15 +17,14 @@ class ParameterTuner:
         self.param_grid = param_grid
         self.best_params = None
         self.best_total_error = float('inf')
-        self._stop_flag = Event()
 
     @staticmethod
     def _save_params(params):
         with open('params_tuner/params_tuner-' + str(datetime.now()) + '.json', 'w') as f:
             json.dump(params, f, indent=4)
 
-    def evaluate_single_param(self, params, test_data, error_callback):
-        if self._stop_flag.is_set():
+    def evaluate_single_param(self, params, test_data, error_callback, stop_flag):
+        if stop_flag.value:
             return None, None
 
         total_error = 0
@@ -51,35 +47,47 @@ class ParameterTuner:
             error = error_callback(detected_clusters, test_item.get("expected_clusters"))
             total_error += error
 
-        if not total_error:
+        if total_error == 0:
             print("Optimal parameters found with zero error: \n" + str(params))
             self._save_params(params)
-            self._stop_flag.set()
+            stop_flag.value = True
 
         return total_error, params
 
-    def evaluate(self, test_data, error_callback, n_jobs=-1):
-        results = Parallel(n_jobs=n_jobs)(
-            delayed(self.evaluate_single_param)(params, test_data, error_callback)
-            for params in tqdm(ParameterGrid(self.param_grid))
-        )
+    def evaluate(self, test_data, error_callback, n_jobs=cpu_count()):
+        manager = Manager()
+        stop_flag = manager.Value('i', False)
 
-        for total_error, params in results:
-            if total_error is None:
-                continue
+        with Pool(processes=n_jobs) as pool:
+            results = []
+            for params in ParameterGrid(self.param_grid):
+                result = pool.apply_async(self.evaluate_single_param, (params, test_data, error_callback, stop_flag))
+                results.append(result)
 
-            if total_error < self.best_total_error:
-                self.best_total_error = total_error
-                self.best_params = params
+            pool.close()
 
-            if not total_error:
-                break
+            for result in results:
+                total_error, params = result.get()
+
+                if total_error is None:
+                    continue
+
+                if total_error < self.best_total_error:
+                    self.best_total_error = total_error
+                    self.best_params = params
+
+                if stop_flag.value:
+                    print("Zero error found, stopping further evaluations")
+                    pool.terminate()
+                    break
+
+            pool.join()
 
         return self.best_params, self.best_total_error
 
 
 if __name__ == "__main__":
-    NEED_TEST_DATA_INDEXES = [4, 5]
+    NEED_TEST_DATA_INDEXES = [0, 1, 2, 3]
     NEED_ERROR_CALLBACK = feedback_cluster_within_bounds
 
     param_grid = {
