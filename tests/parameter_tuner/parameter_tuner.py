@@ -49,7 +49,7 @@ class ParameterTuner:
             total_error += error
 
         if total_error <= self.threshold_errors:
-            print("Optimal parameters found with zero error: \n" + str(params))
+            print("Optimal parameters found: \n" + str(params) + "\nWith total error: " + str(total_error))
             self._save_params(params)
             stop_flag.value = True
 
@@ -110,4 +110,4 @@ if __name__ == "__main__":
     tuner = ParameterTuner(ImageDetector, param_grid, THRESHOLD_ERRORS)
     selected_test_data = [test_data[i] for i in NEED_TEST_DATA_INDEXES]
     best_params, best_total_error = tuner.evaluate(selected_test_data, NEED_ERROR_CALLBACK)
-    print("Best overall params: \n" + str(best_params) + "\n with total error: " + str(best_total_error))
+    print("Optimal parameters found: \n" + str(best_params) + "\nWith total error: " + str(best_total_error))
