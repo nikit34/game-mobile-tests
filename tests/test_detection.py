@@ -1,5 +1,6 @@
 import pytest
 from src.app.components.field_component import FieldComponent
+from src.app.elements.ernie_element import ErnieElement
 from src.image import Image
 from tests.test_base import TestBase
 
@@ -7,7 +8,8 @@ from tests.test_base import TestBase
 class TestDetection(TestBase):
     @pytest.mark.parametrize("field_image_path, expected_clusters", [
         ("app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2)
+        ("app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE)
     ])
     def test_count_clusters(self, field_image_path, expected_clusters):
         original_img = Image(path_image="screenshots/test_detection.png", resize_image=True)
@@ -19,7 +21,8 @@ class TestDetection(TestBase):
 
     @pytest.mark.parametrize("field_image_path, expected_clusters", [
         ("app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2)
+        ("app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE)
     ])
     def test_cluster_within_bounds(self, field_image_path, expected_clusters):
         original_img = Image(path_image="screenshots/test_detection.png", resize_image=True)
