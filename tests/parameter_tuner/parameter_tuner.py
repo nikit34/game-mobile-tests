@@ -39,7 +39,7 @@ class ParameterTuner:
             image_detector.ransac = params['ransac']
             image_detector.ransac_threshold = params['ransac_threshold']
 
-            original_img = Image(path_image=test_item.get("original_img"))
+            original_img = Image(path_image=test_item.get("original_img"), resize_image=True)
             template_img = Image(path_image=test_item.get("template_img"))
 
             detected_clusters = image_detector.get_coordinates_objects(original_img, template_img)
