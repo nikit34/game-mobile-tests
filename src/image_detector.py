@@ -56,7 +56,14 @@ class ImageDetector:
         return hist.flatten()
 
     def compute_sift_keypoints_and_descriptors(self, gray_image):
-        sift = cv2.SIFT_create(nOctaveLayers=self.n_octave_layers, contrastThreshold=self.contrast_threshold, edgeThreshold=10)
+        sift = cv2.SIFT_create(
+            nOctaveLayers=self.n_octave_layers,
+            contrastThreshold=self.contrast_threshold,
+            edgeThreshold=0,
+            nfeatures=0,
+            sigma=1.8,
+            descriptorType=cv2.CV_32F
+        )
         keypoints, descriptors = sift.detectAndCompute(gray_image, None)
         if descriptors is None:
             return [], None
