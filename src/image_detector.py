@@ -118,11 +118,6 @@ class ImageDetector:
     def draw_clusters_and_points(image, cluster_bounds, coordinates, cluster_labels):
         coordinates = np.array(coordinates)
 
-        if len(cluster_labels) > len(coordinates):
-            cluster_labels = cluster_labels[:len(coordinates)]
-        elif len(coordinates) > len(cluster_labels):
-            coordinates = coordinates[:len(cluster_labels)]
-
         for i, ((x_min, y_min), (x_max, y_max)) in enumerate(cluster_bounds, start=1):
             cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (255, 0, 0), 2)
             label_position = (x_min, y_min - 10) if y_min - 10 > 0 else (x_min, y_min + 10)
@@ -193,6 +188,9 @@ class ImageDetector:
             all_good_matches.extend(good_matches)
 
         coordinates = self.extract_coordinates_from_matches(all_good_matches, kp2)
+
+        cluster_labels = self.perform_clustering(coordinates)
+        cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
 
         self.draw_clusters_and_points(original_img.cv_image, cluster_bounds, coordinates, cluster_labels)
 
