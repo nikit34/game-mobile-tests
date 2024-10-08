@@ -5,6 +5,14 @@ class ImagesDetectorConfig(Config):
     CONFIG = 'json/images_detector.json'
 
     @classmethod
+    def get_n_octave_layers(cls):
+        return cls.load_config(cls.CONFIG).get('n_octave_layers')
+
+    @classmethod
+    def get_contrast_threshold(cls):
+        return cls.load_config(cls.CONFIG).get('contrast_threshold')
+
+    @classmethod
     def get_eps(cls):
         return cls.load_config(cls.CONFIG).get('eps')
 

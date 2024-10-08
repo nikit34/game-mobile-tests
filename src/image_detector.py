@@ -7,6 +7,8 @@ from configs.images_detector_config import ImagesDetectorConfig
 class ImageDetector:
     def __init__(
             self,
+            n_octave_layers=ImagesDetectorConfig.get_n_octave_layers(),
+            contrast_threshold=ImagesDetectorConfig.get_contrast_threshold(),
             eps=ImagesDetectorConfig.get_eps(),
             clahe_clip_limit=ImagesDetectorConfig.get_clahe_clip_limit(),
             clahe_grid_size=ImagesDetectorConfig.get_clahe_grid_size(),
@@ -20,6 +22,8 @@ class ImageDetector:
             flann_checks=50,
             good_match_threshold=0.75,
     ):
+        self.n_octave_layers = n_octave_layers
+        self.contrast_threshold = contrast_threshold
         self.eps = eps
         self.clahe_clip_limit = clahe_clip_limit
         self.clahe_grid_size = clahe_grid_size
@@ -51,9 +55,8 @@ class ImageDetector:
         cv2.normalize(hist, hist)
         return hist.flatten()
 
-    @staticmethod
-    def compute_sift_keypoints_and_descriptors(gray_image):
-        sift = cv2.SIFT_create()
+    def compute_sift_keypoints_and_descriptors(self, gray_image):
+        sift = cv2.SIFT_create(nOctaveLayers=self.n_octave_layers, contrastThreshold=self.contrast_threshold, edgeThreshold=10)
         keypoints, descriptors = sift.detectAndCompute(gray_image, None)
         if descriptors is None:
             return [], None
