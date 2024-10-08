@@ -1,5 +1,4 @@
 from multiprocessing import Pool, Manager, cpu_count
-
 from sklearn.model_selection import ParameterGrid
 import json
 from datetime import datetime
@@ -12,11 +11,13 @@ from tests.parameter_tuner.test_data import test_data
 
 
 class ParameterTuner:
-    def __init__(self, image_detector_class, param_grid):
+    def __init__(self, image_detector_class, param_grid, threshold_errors):
         self.image_detector_class = image_detector_class
         self.param_grid = param_grid
         self.best_params = None
         self.best_total_error = float('inf')
+        self.n_jobs = int(cpu_count() / 2)
+        self.threshold_errors = threshold_errors
 
     @staticmethod
     def _save_params(params):
@@ -47,18 +48,18 @@ class ParameterTuner:
             error = error_callback(detected_clusters, test_item.get("expected_clusters"))
             total_error += error
 
-        if total_error == 0:
+        if total_error <= self.threshold_errors:
             print("Optimal parameters found with zero error: \n" + str(params))
             self._save_params(params)
             stop_flag.value = True
 
         return total_error, params
 
-    def evaluate(self, test_data, error_callback, n_jobs=cpu_count()):
+    def evaluate(self, test_data, error_callback):
         manager = Manager()
         stop_flag = manager.Value('i', False)
 
-        with Pool(processes=n_jobs) as pool:
+        with Pool(processes=self.n_jobs) as pool:
             results = []
             for params in ParameterGrid(self.param_grid):
                 result = pool.apply_async(self.evaluate_single_param, (params, test_data, error_callback, stop_flag))
@@ -89,6 +90,7 @@ class ParameterTuner:
 if __name__ == "__main__":
     NEED_TEST_DATA_INDEXES = [0, 1, 2, 3]
     NEED_ERROR_CALLBACK = feedback_cluster_within_bounds
+    THRESHOLD_ERRORS = 200
 
     param_grid = {
         "n_octave_layers": [3, 5, 15, 50],
@@ -105,7 +107,7 @@ if __name__ == "__main__":
     files_manager = FilesManager()
     files_manager.remove("params_tuner")
 
-    tuner = ParameterTuner(ImageDetector, param_grid)
+    tuner = ParameterTuner(ImageDetector, param_grid, THRESHOLD_ERRORS)
     selected_test_data = [test_data[i] for i in NEED_TEST_DATA_INDEXES]
     best_params, best_total_error = tuner.evaluate(selected_test_data, NEED_ERROR_CALLBACK)
     print("Best overall params: \n" + str(best_params) + "\n with total error: " + str(best_total_error))
