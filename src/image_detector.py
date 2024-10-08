@@ -16,7 +16,7 @@ class ImageDetector:
             flann_trees=5,
             flann_checks=50,
             good_match_threshold=0.75,
-            ransac_threshold=5.0
+            ransac_threshold=150.0
     ):
         self.eps = eps
         self.clahe_clip_limit = clahe_clip_limit
@@ -132,7 +132,7 @@ class ImageDetector:
 
     def apply_ransac(self, kp1, kp2, matches):
         if len(matches) < 4:
-            return None, []
+            return []
 
         src_pts = np.float32([kp1[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)
         dst_pts = np.float32([kp2[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
@@ -141,7 +141,9 @@ class ImageDetector:
         matchesMask = mask.ravel().tolist()
 
         good_matches = [m for i, m in enumerate(matches) if matchesMask[i] == 1]
-        return M, good_matches
+        if M is None or len(good_matches) < 4:
+            return []
+        return good_matches
 
     def get_coordinates_objects(self, original_img, template_img):
         original_img.cv_image = self.convert_to_color_if_needed(original_img.cv_image)
@@ -160,8 +162,9 @@ class ImageDetector:
         kp2, des2 = self.compute_sift_keypoints_and_descriptors(gray_original)
 
         matches = self.match_descriptors(des1, des2)
+        good_matches = self.apply_ransac(kp1, kp2, matches)
 
-        coordinates = self.extract_coordinates_from_matches(matches, kp2)
+        coordinates = self.extract_coordinates_from_matches(good_matches, kp2)
         cluster_labels = self.perform_clustering(coordinates)
         cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
 
