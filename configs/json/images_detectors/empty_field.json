@@ -4,8 +4,8 @@
   "contrast_threshold": 0.02,
   "eps": 10,
   "min_cluster_area": 500,
-  "min_samples": 3,
-  "n_octave_layers": 3,
-  "ransac": false,
+  "min_samples": 9,
+  "n_octave_layers": 50,
+  "ransac": true,
   "ransac_threshold": 10
 }
