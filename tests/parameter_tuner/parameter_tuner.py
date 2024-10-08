@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from sklearn.model_selection import ParameterGrid
 from tqdm import tqdm
 
 from src.image import Image
+import json
 from src.image_detector import ImageDetector
 from src.images_manager import ImagesManager
 from tests.parameter_tuner.feedbacks import feedback_count_clusters
@@ -16,6 +19,11 @@ class ParameterTuner:
         self.param_grid = param_grid
         self.best_params = None
         self.best_total_error = float('inf')
+
+    @staticmethod
+    def _save_params(params):
+        with open('params_tuner-' + str(datetime.now()) + '.json', 'w') as f:
+            json.dump(params, f)
 
     def evaluate_single_param(self, params, test_data, error_callback):
         total_error = 0
@@ -37,6 +45,9 @@ class ParameterTuner:
             detected_clusters = image_detector.get_coordinates_objects(original_img, template_img)
             error = error_callback(detected_clusters, test_item.get("expected_clusters"))
             total_error += error
+
+        if not total_error:
+            self._save_params(params)
 
         return total_error, params
 
