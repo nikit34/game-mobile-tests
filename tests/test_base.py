@@ -27,6 +27,9 @@ class TestBase:
         if not detected_clusters:
             raise AssertionError("No clusters were found")
 
-        for detected, expected in zip(detected_clusters, expected_clusters):
+        detected_clusters_sorted = sorted(detected_clusters, key=lambda cluster: cluster[0][0])
+        expected_clusters_sorted = sorted(expected_clusters, key=lambda cluster: cluster[0][0])
+
+        for detected, expected in zip(detected_clusters_sorted, expected_clusters_sorted):
             if not self.is_within_bounds(detected, expected):
                 raise AssertionError("Cluster " + str(detected) + " is out of bounds " + str(expected))
