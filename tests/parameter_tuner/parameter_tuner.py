@@ -43,7 +43,6 @@ class ParameterTuner:
 if __name__ == "__main__":
     NEED_TEST_DATA_INDEXES = [0]
     NEED_ERROR_CALLBACK = feedback_count_clusters
-
     param_grid = {
         "n_octave_layers": [3, 5, 15, 50],
         "contrast_threshold": [0.02, 0.04],
@@ -60,13 +59,9 @@ if __name__ == "__main__":
     images_manager.remove("temporary_images")
 
     selected_test_data = [test_data[i] for i in NEED_TEST_DATA_INDEXES]
-
     for test_item in selected_test_data:
-
         image_detector = ImageDetector(test_item.get("target"))
-
         tuner = ParameterTuner(image_detector, param_grid)
-
         best_params, best_error = tuner.evaluate(
             original_img=lambda: Image(path_image=test_item.get("original_img")),
             template_img=lambda: Image(path_image=test_item.get("template_img")),
