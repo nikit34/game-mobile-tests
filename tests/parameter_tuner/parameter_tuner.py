@@ -1,11 +1,11 @@
 from sklearn.model_selection import ParameterGrid
 from tqdm import tqdm
 
-from src.app.components.field_component import FieldComponent
-from src.app.elements.ernie_element import ErnieElement
 from src.image import Image
 from src.image_detector import ImageDetector
 from src.images_manager import ImagesManager
+from tests.parameter_tuner.feedbacks import feedback_count_clusters
+from tests.parameter_tuner.test_data import test_data
 
 
 class ParameterTuner:
@@ -15,7 +15,7 @@ class ParameterTuner:
         self.best_params = None
         self.best_error = float('inf')
 
-    def evaluate(self, original_img, template_img, expected_clusters):
+    def evaluate(self, original_img, template_img, expected_clusters, error_callback):
         for params in tqdm(ParameterGrid(self.param_grid)):
             self.image_detector.n_octave_layers = params['n_octave_layers']
             self.image_detector.contrast_threshold = params['contrast_threshold']
@@ -29,18 +29,20 @@ class ParameterTuner:
 
             detected_clusters = image_detector.get_coordinates_objects(original_img(), template_img())
 
-            error = abs(len(detected_clusters) - len(expected_clusters))
-
+            error = error_callback(detected_clusters, expected_clusters)
             if error < self.best_error:
                 self.best_error = error
                 self.best_params = params
+
+            if not error:
+                break
 
         return self.best_params, self.best_error
 
 
 if __name__ == "__main__":
-    images_manager = ImagesManager()
-    images_manager.remove("temporary_images")
+    NEED_TEST_DATA_INDEXES = [0]
+    NEED_ERROR_CALLBACK = feedback_count_clusters
 
     param_grid = {
         "n_octave_layers": [3, 5, 15, 50],
@@ -54,46 +56,12 @@ if __name__ == "__main__":
         "ransac_threshold": [10]
     }
 
-    test_data = (
-        {
-            "target": "empty_field",
-            "original_img": "screenshots/test_detection_1.png",
-            "template_img": "app/elements/img/empty_field_element_1.png",
-            "expected_clusters": FieldComponent.COORDINATES_FIELD_1
-        },
-        {
-            "target": "empty_field",
-            "original_img": "screenshots/test_detection_2.png",
-            "template_img": "app/elements/img/empty_field_element_1.png",
-            "expected_clusters": FieldComponent.COORDINATES_FIELD_1
-        },
-        {
-            "target": "empty_field",
-            "original_img": "screenshots/test_detection_1.png",
-            "template_img": "app/elements/img/empty_field_element_2.png",
-            "expected_clusters": FieldComponent.COORDINATES_FIELD_2
-        },
-        {
-            "target": "empty_field",
-            "original_img": "screenshots/test_detection_2.png",
-            "template_img": "app/elements/img/empty_field_element_2.png",
-            "expected_clusters": FieldComponent.COORDINATES_FIELD_2
-        },
-        {
-            "target": "ernie",
-            "original_img": "screenshots/test_detection_1.png",
-            "template_img": "app/elements/img/ernie_element.png",
-            "expected_clusters": ErnieElement.COORDINATES_ERNIE
-        },
-        {
-            "target": "ernie",
-            "original_img": "screenshots/test_detection_2.png",
-            "template_img": "app/elements/img/ernie_element.png",
-            "expected_clusters": ErnieElement.COORDINATES_ERNIE
-        }
-    )
+    images_manager = ImagesManager()
+    images_manager.remove("temporary_images")
 
-    for test_item in test_data:
+    selected_test_data = [test_data[i] for i in NEED_TEST_DATA_INDEXES]
+
+    for test_item in selected_test_data:
 
         image_detector = ImageDetector(test_item.get("target"))
 
@@ -102,7 +70,8 @@ if __name__ == "__main__":
         best_params, best_error = tuner.evaluate(
             original_img=lambda: Image(path_image=test_item.get("original_img")),
             template_img=lambda: Image(path_image=test_item.get("template_img")),
-            expected_clusters=test_item.get("expected_clusters")
+            expected_clusters=test_item.get("expected_clusters"),
+            error_callback=NEED_ERROR_CALLBACK
         )
 
         print("Best params: " + str(best_params) + " with error: " + str(best_error) + " for test data: " + str(test_item))
