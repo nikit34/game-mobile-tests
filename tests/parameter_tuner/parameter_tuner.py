@@ -1,4 +1,5 @@
 from datetime import datetime
+from multiprocessing import Event
 
 from sklearn.model_selection import ParameterGrid
 from tqdm import tqdm
@@ -7,7 +8,7 @@ from src.image import Image
 import json
 from src.image_detector import ImageDetector
 from src.files_manager import FilesManager
-from tests.parameter_tuner.feedbacks import feedback_count_clusters
+from tests.parameter_tuner.feedbacks import feedback_count_clusters, feedback_cluster_within_bounds
 from tests.parameter_tuner.test_data import test_data
 
 from joblib import Parallel, delayed
@@ -19,6 +20,7 @@ class ParameterTuner:
         self.param_grid = param_grid
         self.best_params = None
         self.best_total_error = float('inf')
+        self._stop_flag = Event()
 
     @staticmethod
     def _save_params(params):
@@ -26,6 +28,9 @@ class ParameterTuner:
             json.dump(params, f, indent=4)
 
     def evaluate_single_param(self, params, test_data, error_callback):
+        if self._stop_flag.is_set():
+            return None, None
+
         total_error = 0
         for test_item in test_data:
             image_detector = self.image_detector_class(test_item.get("target"), save_img=False)
@@ -47,7 +52,9 @@ class ParameterTuner:
             total_error += error
 
         if not total_error:
+            print("Optimal parameters found with zero error: \n" + str(params))
             self._save_params(params)
+            self._stop_flag.set()
 
         return total_error, params
 
@@ -58,6 +65,9 @@ class ParameterTuner:
         )
 
         for total_error, params in results:
+            if total_error is None:
+                continue
+
             if total_error < self.best_total_error:
                 self.best_total_error = total_error
                 self.best_params = params
@@ -69,8 +79,9 @@ class ParameterTuner:
 
 
 if __name__ == "__main__":
-    NEED_TEST_DATA_INDEXES = [0, 1, 2, 3]
-    NEED_ERROR_CALLBACK = feedback_count_clusters
+    NEED_TEST_DATA_INDEXES = [4, 5]
+    NEED_ERROR_CALLBACK = feedback_cluster_within_bounds
+
     param_grid = {
         "n_octave_layers": [3, 5, 15, 50],
         "contrast_threshold": [0.02, 0.04],
