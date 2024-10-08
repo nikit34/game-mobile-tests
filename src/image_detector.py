@@ -33,10 +33,15 @@ class ImageDetector:
     @staticmethod
     def compute_sift_keypoints_and_descriptors(gray_image):
         sift = cv2.SIFT_create()
-        return sift.detectAndCompute(gray_image, None)
+        keypoints, descriptors = sift.detectAndCompute(gray_image, None)
+        if descriptors is None:
+            return [], None
+        return keypoints, descriptors
 
     @staticmethod
     def match_descriptors(des1, des2):
+        if des1 is None or des2 is None:
+            return []
         bf = cv2.BFMatcher(cv2.NORM_L2)
         matches = bf.match(des1, des2)
         return sorted(matches, key=lambda x: x.distance)
@@ -54,10 +59,9 @@ class ImageDetector:
             coordinates = np.array(coordinates)
             clustering = DBSCAN(eps=self.eps).fit(coordinates)
             cluster_labels = clustering.labels_
-            clustered_coords = coordinates[cluster_labels != -1]
-            return clustered_coords, cluster_labels
+            return cluster_labels
         else:
-            return np.array([]), []
+            return []
 
     def get_cluster_bounds(self, coordinates, cluster_labels):
         cluster_bounds = []
@@ -79,15 +83,22 @@ class ImageDetector:
         return cluster_bounds
 
     @staticmethod
-    def draw_clusters_and_points(image, cluster_bounds, clustered_coords):
+    def draw_clusters_and_points(image, cluster_bounds, coordinates, cluster_labels):
+        coordinates = np.array(coordinates)
+
         for i, ((x_min, y_min), (x_max, y_max)) in enumerate(cluster_bounds, start=1):
-            cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
+            cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (255, 0, 0), 2)
 
             label_position = (x_min, y_min - 10) if y_min - 10 > 0 else (x_min, y_min + 10)
-            cv2.putText(image, str(i), label_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            cv2.putText(image, str(i), label_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
+        clustered_coords = coordinates[cluster_labels != -1]
         for x, y in clustered_coords:
-            cv2.circle(image, (x, y), 5, (255, 0, 0), -1)
+            cv2.circle(image, (x, y), 3, (0, 255, 0), -1)
+
+        noise_coords = coordinates[cluster_labels == -1]
+        for x, y in noise_coords:
+            cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
 
     @staticmethod
     def convert_to_color_if_needed(image):
@@ -108,13 +119,19 @@ class ImageDetector:
         kp1, des1 = self.compute_sift_keypoints_and_descriptors(gray_template)
         kp2, des2 = self.compute_sift_keypoints_and_descriptors(gray_original)
 
+        if des1 is None or des2 is None:
+            return []
+
         matches = self.match_descriptors(des1, des2)
         coordinates = self.extract_coordinates_from_matches(matches, kp2)
 
-        clustered_coords, cluster_labels = self.perform_clustering(coordinates)
+        if not coordinates:
+            return []
+
+        cluster_labels = self.perform_clustering(coordinates)
         cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
 
-        self.draw_clusters_and_points(original_img.cv_image, cluster_bounds, clustered_coords)
+        self.draw_clusters_and_points(original_img.cv_image, cluster_bounds, coordinates, cluster_labels)
 
         color_hist_template = self.get_color_histogram(template_img.cv_image)
         color_hist_original = self.get_color_histogram(original_img.cv_image)
