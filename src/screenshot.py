@@ -1,10 +1,10 @@
 from datetime import datetime
 import os
 
-from src.images_manager import ImagesManager
+from src.files_manager import FilesManager
 
 
-class Screenshot(ImagesManager):
+class Screenshot(FilesManager):
     def __init__(self, driver):
         self.driver = driver
         super().__init__()

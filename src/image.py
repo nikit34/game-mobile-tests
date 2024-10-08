@@ -7,7 +7,7 @@ import cv2
 from pathlib import Path
 
 from configs.device_config import DeviceConfig
-from src.images_manager import ImagesManager
+from src.files_manager import FilesManager
 
 
 def resize(func):
@@ -28,7 +28,7 @@ def resize(func):
     return wrapper
 
 
-class Image(ImagesManager):
+class Image(FilesManager):
     def __init__(self, image=None, path_image=None, flags=cv2.IMREAD_GRAYSCALE, resize_image=False):
         super().__init__()
         self.resize_image = resize_image

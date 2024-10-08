@@ -6,7 +6,7 @@ from tqdm import tqdm
 from src.image import Image
 import json
 from src.image_detector import ImageDetector
-from src.images_manager import ImagesManager
+from src.files_manager import FilesManager
 from tests.parameter_tuner.feedbacks import feedback_count_clusters
 from tests.parameter_tuner.test_data import test_data
 
@@ -83,8 +83,8 @@ if __name__ == "__main__":
         "ransac_threshold": [10]
     }
 
-    images_manager = ImagesManager()
-    images_manager.remove("temporary_images")
+    files_manager = FilesManager()
+    files_manager.remove("params_tuner")
 
     tuner = ParameterTuner(ImageDetector, param_grid)
     selected_test_data = [test_data[i] for i in NEED_TEST_DATA_INDEXES]
