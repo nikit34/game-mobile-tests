@@ -138,21 +138,6 @@ class ImageDetector:
             return cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
         return image
 
-    def apply_ransac(self, kp1, kp2, matches):
-        if len(matches) < 4:
-            return []
-
-        src_pts = np.float32([kp1[m.queryIdx].pt for m in matches]).reshape(-1, 1, 2)
-        dst_pts = np.float32([kp2[m.trainIdx].pt for m in matches]).reshape(-1, 1, 2)
-
-        M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, self.ransac_threshold)
-        matchesMask = mask.ravel().tolist()
-
-        good_matches = [m for i, m in enumerate(matches) if matchesMask[i] == 1]
-        if M is None or len(good_matches) < 4:
-            return []
-        return good_matches
-
     def get_coordinates_objects(self, original_img, template_img):
         original_img.cv_image = self.convert_to_color_if_needed(original_img.cv_image)
         template_img.cv_image = self.convert_to_color_if_needed(template_img.cv_image)
@@ -173,9 +158,8 @@ class ImageDetector:
             matches = self.match_descriptors_flann(des1, des2)
         else:
             matches = self.match_descriptors_brute_force(des1, des2)
-        good_matches = self.apply_ransac(kp1, kp2, matches)
 
-        coordinates = self.extract_coordinates_from_matches(good_matches, kp2)
+        coordinates = self.extract_coordinates_from_matches(matches, kp2)
         cluster_labels = self.perform_clustering(coordinates)
         cluster_bounds = self.get_cluster_bounds(coordinates, cluster_labels)
 
