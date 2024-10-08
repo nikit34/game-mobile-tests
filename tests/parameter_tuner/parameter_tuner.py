@@ -28,7 +28,7 @@ class ParameterTuner:
     def evaluate_single_param(self, params, test_data, error_callback):
         total_error = 0
         for test_item in test_data:
-            image_detector = self.image_detector_class(test_item.get("target"))
+            image_detector = self.image_detector_class(test_item.get("target"), save_img=False)
             image_detector.n_octave_layers = params['n_octave_layers']
             image_detector.contrast_threshold = params['contrast_threshold']
             image_detector.eps = params['eps']

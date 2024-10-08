@@ -5,8 +5,9 @@ from configs.images_detector_config import ImagesDetectorConfig
 
 
 class ImageDetector:
-    def __init__( self, name_target):
+    def __init__( self, name_target, save_img=True):
         config = ImagesDetectorConfig(name_target)
+
         self.n_octave_layers = config.get_n_octave_layers()
         self.contrast_threshold = config.get_contrast_threshold()
         self.eps = config.get_eps()
@@ -16,6 +17,8 @@ class ImageDetector:
         self.min_samples = config.get_min_samples()
         self.ransac = config.get_ransac()
         self.ransac_threshold = config.get_ransac_threshold()
+
+        self.save_img = save_img
 
     def apply_clahe(self, image):
         clahe = cv2.createCLAHE(clipLimit=self.clahe_clip_limit, tileGridSize=self.clahe_grid_size)
@@ -170,7 +173,8 @@ class ImageDetector:
 
         self.draw_clusters_and_points(original_img.cv_image, cluster_bounds, coordinates, cluster_labels)
 
-        original_img.save("detected")
-        template_img.save("template")
+        if self.save_img:
+            original_img.save("detected")
+            template_img.save("template")
 
         return cluster_bounds
