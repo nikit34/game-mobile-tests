@@ -31,7 +31,7 @@ def resize(func):
 class Image(ImagesManager):
     def __init__(self, image=None, path_image=None, flags=cv2.IMREAD_GRAYSCALE, resize_image=False):
         super().__init__()
-        self.resize_image = resize_image  # Флаг для изменения размера
+        self.resize_image = resize_image
         self.cv_image = self._load_image(image, path_image, flags)
 
     @resize
