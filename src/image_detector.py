@@ -97,12 +97,14 @@ class ImageDetector:
             cv2.putText(image, str(i), label_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
         clustered_coords = coordinates[cluster_labels != -1]
-        for x, y in clustered_coords:
-            cv2.circle(image, (x, y), 3, (0, 255, 0), -1)
+        if clustered_coords.size:
+            for x, y in clustered_coords:
+                cv2.circle(image, (x, y), 3, (0, 255, 0), -1)
 
         noise_coords = coordinates[cluster_labels == -1]
-        for x, y in noise_coords:
-            cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
+        if noise_coords.size:
+            for x, y in noise_coords:
+                cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
 
     @staticmethod
     def convert_to_color_if_needed(image):
