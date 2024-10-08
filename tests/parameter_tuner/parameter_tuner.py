@@ -22,8 +22,8 @@ class ParameterTuner:
 
     @staticmethod
     def _save_params(params):
-        with open('params_tuner-' + str(datetime.now()) + '.json', 'w') as f:
-            json.dump(params, f)
+        with open('params_tuner/params_tuner-' + str(datetime.now()) + '.json', 'w') as f:
+            json.dump(params, f, indent=4)
 
     def evaluate_single_param(self, params, test_data, error_callback):
         total_error = 0
