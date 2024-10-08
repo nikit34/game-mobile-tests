@@ -7,6 +7,8 @@ from src.images_manager import ImagesManager
 from tests.parameter_tuner.feedbacks import feedback_count_clusters
 from tests.parameter_tuner.test_data import test_data
 
+from joblib import Parallel, delayed
+
 
 class ParameterTuner:
     def __init__(self, image_detector_class, param_grid):
@@ -15,31 +17,36 @@ class ParameterTuner:
         self.best_params = None
         self.best_total_error = float('inf')
 
-    def evaluate(self, test_data, error_callback):
-        for params in tqdm(ParameterGrid(self.param_grid)):
-            total_error = 0
+    def evaluate_single_param(self, params, test_data, error_callback):
+        total_error = 0
+        for test_item in test_data:
+            image_detector = self.image_detector_class(test_item.get("target"))
+            image_detector.n_octave_layers = params['n_octave_layers']
+            image_detector.contrast_threshold = params['contrast_threshold']
+            image_detector.eps = params['eps']
+            image_detector.clahe_clip_limit = params['clahe_clip_limit']
+            image_detector.clahe_grid_size = params['clahe_grid_size']
+            image_detector.min_cluster_area = params['min_cluster_area']
+            image_detector.min_samples = params['min_samples']
+            image_detector.ransac = params['ransac']
+            image_detector.ransac_threshold = params['ransac_threshold']
 
-            for test_item in test_data:
-                image_detector = self.image_detector_class(test_item.get("target"))
+            original_img = Image(path_image=test_item.get("original_img"))
+            template_img = Image(path_image=test_item.get("template_img"))
 
-                image_detector.n_octave_layers = params['n_octave_layers']
-                image_detector.contrast_threshold = params['contrast_threshold']
-                image_detector.eps = params['eps']
-                image_detector.clahe_clip_limit = params['clahe_clip_limit']
-                image_detector.clahe_grid_size = params['clahe_grid_size']
-                image_detector.min_cluster_area = params['min_cluster_area']
-                image_detector.min_samples = params['min_samples']
-                image_detector.ransac = params['ransac']
-                image_detector.ransac_threshold = params['ransac_threshold']
+            detected_clusters = image_detector.get_coordinates_objects(original_img, template_img)
+            error = error_callback(detected_clusters, test_item.get("expected_clusters"))
+            total_error += error
 
-                original_img = Image(path_image=test_item.get("original_img"))
-                template_img = Image(path_image=test_item.get("template_img"))
+        return total_error, params
 
-                detected_clusters = image_detector.get_coordinates_objects(original_img, template_img)
+    def evaluate(self, test_data, error_callback, n_jobs=-1):
+        results = Parallel(n_jobs=n_jobs)(
+            delayed(self.evaluate_single_param)(params, test_data, error_callback)
+            for params in tqdm(ParameterGrid(self.param_grid))
+        )
 
-                error = error_callback(detected_clusters, test_item.get("expected_clusters"))
-                total_error += error
-
+        for total_error, params in results:
             if total_error < self.best_total_error:
                 self.best_total_error = total_error
                 self.best_params = params
@@ -51,7 +58,7 @@ class ParameterTuner:
 
 
 if __name__ == "__main__":
-    NEED_TEST_DATA_INDEXES = [0, 1, 2]
+    NEED_TEST_DATA_INDEXES = [0, 1, 2, 3]
     NEED_ERROR_CALLBACK = feedback_count_clusters
     param_grid = {
         "n_octave_layers": [3, 5, 15, 50],
