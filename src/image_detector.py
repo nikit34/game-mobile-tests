@@ -12,7 +12,6 @@ class ImageDetector:
             eps=ImagesDetectorConfig.get_eps(),
             clahe_clip_limit=ImagesDetectorConfig.get_clahe_clip_limit(),
             clahe_grid_size=ImagesDetectorConfig.get_clahe_grid_size(),
-            min_color_similarity=ImagesDetectorConfig.get_min_color_similarity(),
             min_cluster_area=ImagesDetectorConfig.get_min_cluster_area(),
             min_samples=ImagesDetectorConfig.get_min_samples(),
             ransac=True,
@@ -27,7 +26,6 @@ class ImageDetector:
         self.eps = eps
         self.clahe_clip_limit = clahe_clip_limit
         self.clahe_grid_size = clahe_grid_size
-        self.min_color_similarity = min_color_similarity
         self.min_cluster_area = min_cluster_area
         self.min_samples = min_samples
         self.ransac = ransac
@@ -48,12 +46,6 @@ class ImageDetector:
         l = clahe.apply(l)
         lab = cv2.merge((l, a, b))
         return cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
-
-    @staticmethod
-    def get_color_histogram(image, bins=(8, 8, 8)):
-        hist = cv2.calcHist([image], [0, 1, 2], None, bins, [0, 256, 0, 256, 0, 256])
-        cv2.normalize(hist, hist)
-        return hist.flatten()
 
     def compute_sift_keypoints_and_descriptors(self, gray_image):
         sift = cv2.SIFT_create(
@@ -212,13 +204,7 @@ class ImageDetector:
 
         self.draw_clusters_and_points(original_img.cv_image, cluster_bounds, coordinates, cluster_labels)
 
-        color_hist_template = self.get_color_histogram(template_img.cv_image)
-        color_hist_original = self.get_color_histogram(original_img.cv_image)
-        color_similarity = cv2.compareHist(color_hist_template, color_hist_original, cv2.HISTCMP_CORREL)
+        original_img.save("detected")
+        template_img.save("template")
 
-        if color_similarity > self.min_color_similarity:
-            original_img.save("detected")
-            template_img.save("template")
-            return cluster_bounds
-        else:
-            return []
+        return cluster_bounds

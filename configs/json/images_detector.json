@@ -4,8 +4,7 @@
   "eps": 10,
   "clahe_clip_limit": 7.0,
   "clahe_grid_size": [8, 1],
-  "min_color_similarity": 0.2,
   "min_cluster_area": 400,
   "min_samples": 8,
-  "ransac_threshold": 10.0
+  "ransac_threshold": 5.0
 }

@@ -25,10 +25,6 @@ class ImagesDetectorConfig(Config):
         return cls.load_config(cls.CONFIG).get('clahe_grid_size')
 
     @classmethod
-    def get_min_color_similarity(cls):
-        return cls.load_config(cls.CONFIG).get('min_color_similarity')
-
-    @classmethod
     def get_min_cluster_area(cls):
         return cls.load_config(cls.CONFIG).get('min_cluster_area')
 
