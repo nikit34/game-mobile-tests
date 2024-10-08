@@ -1,5 +1,4 @@
 from configs.images_checker_config import ImagesCheckerConfig
-from src.image_detector import ImageDetector
 from src.images_manager import ImagesManager
 
 
@@ -10,7 +9,6 @@ class TestBase:
         images_manager.remove("temporary_images")
 
         cls.tolerance = ImagesCheckerConfig.get_tolerance()
-        cls.image_detector = ImageDetector()
 
     def is_within_bounds(self, cluster, expected_cluster):
         ((x_min1, y_min1), (x_max1, y_max1)) = cluster

@@ -5,27 +5,17 @@ from configs.images_detector_config import ImagesDetectorConfig
 
 
 class ImageDetector:
-    def __init__(
-            self,
-            n_octave_layers=ImagesDetectorConfig.get_n_octave_layers(),
-            contrast_threshold=ImagesDetectorConfig.get_contrast_threshold(),
-            eps=ImagesDetectorConfig.get_eps(),
-            clahe_clip_limit=ImagesDetectorConfig.get_clahe_clip_limit(),
-            clahe_grid_size=ImagesDetectorConfig.get_clahe_grid_size(),
-            min_cluster_area=ImagesDetectorConfig.get_min_cluster_area(),
-            min_samples=ImagesDetectorConfig.get_min_samples(),
-            ransac=ImagesDetectorConfig.get_ransac(),
-            ransac_threshold=ImagesDetectorConfig.get_ransac_threshold(),
-    ):
-        self.n_octave_layers = n_octave_layers
-        self.contrast_threshold = contrast_threshold
-        self.eps = eps
-        self.clahe_clip_limit = clahe_clip_limit
-        self.clahe_grid_size = clahe_grid_size
-        self.min_cluster_area = min_cluster_area
-        self.min_samples = min_samples
-        self.ransac = ransac
-        self.ransac_threshold = ransac_threshold
+    def __init__( self, name_target):
+        config = ImagesDetectorConfig(name_target)
+        self.n_octave_layers = config.get_n_octave_layers()
+        self.contrast_threshold = config.get_contrast_threshold()
+        self.eps = config.get_eps()
+        self.clahe_clip_limit = config.get_clahe_clip_limit()
+        self.clahe_grid_size = config.get_clahe_grid_size()
+        self.min_cluster_area = config.get_min_cluster_area()
+        self.min_samples = config.get_min_samples()
+        self.ransac = config.get_ransac()
+        self.ransac_threshold = config.get_ransac_threshold()
 
     def apply_clahe(self, image):
         clahe = cv2.createCLAHE(clipLimit=self.clahe_clip_limit, tileGridSize=self.clahe_grid_size)

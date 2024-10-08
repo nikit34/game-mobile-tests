@@ -2,13 +2,13 @@ from time import sleep
 
 from pytest import mark
 
-from src.actions_manager import ActionsManager
 from src.app.components.field_component import FieldComponent
 from src.app.elements.ernie_element import ErnieElement
 from src.app.screens.onboarding.components.game_center_component import GameCenterComponent
 from src.app.elements.system_dialog_btn_element import SystemDialogBtnElement
 from src.environment_manager import EnvironmentManager
 from src.image import Image
+from src.image_detector import ImageDetector
 from src.screenshot import Screenshot
 from tests.test_base import TestBase
 from tests.conftest import driver, appium_service
@@ -32,18 +32,21 @@ class TestOnboarding(TestBase):
 
         original_img = Image(image=screenshot_img, resize_image=True)
         empty_field_1_img = Image(path_image="app/elements/img/empty_field_element_1.png")
-        detected_clusters = self.image_detector.get_coordinates_objects(original_img, empty_field_1_img)
+        image_detector = ImageDetector('empty_field')
+        detected_clusters = image_detector.get_coordinates_objects(original_img, empty_field_1_img)
         expected_clusters = FieldComponent.COORDINATES_FIELD_1
         self.check_clusters(detected_clusters, expected_clusters)
 
         original_img = Image(image=screenshot_img, resize_image=True)
         empty_field_2_img = Image(path_image="app/elements/img/empty_field_element_2.png")
-        detected_clusters = self.image_detector.get_coordinates_objects(original_img, empty_field_2_img)
+        image_detector = ImageDetector('empty_field')
+        detected_clusters = image_detector.get_coordinates_objects(original_img, empty_field_2_img)
         expected_clusters = FieldComponent.COORDINATES_FIELD_2
         self.check_clusters(detected_clusters, expected_clusters)
 
         original_img = Image(image=screenshot_img, resize_image=True)
         ernie_img = Image(path_image="app/elements/img/ernie_element.png")
-        detected_clusters = self.image_detector.get_coordinates_objects(original_img, ernie_img)
+        image_detector = ImageDetector('ernie')
+        detected_clusters = image_detector.get_coordinates_objects(original_img, ernie_img)
         expected_clusters = ErnieElement.COORDINATES_ERNIE
         self.check_clusters(detected_clusters, expected_clusters)
