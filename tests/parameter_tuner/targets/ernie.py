@@ -42,13 +42,13 @@ class ErnieTarget:
     ERROR_CALLBACK = feedback_cluster_within_bounds
 
     PARAM_GRID = {
-        "n_octave_layers": [2, 3],
-        "contrast_threshold": [0.02, 0.03],
-        "eps": [13],
-        "clahe_clip_limit": [2.0, 3.0],
-        "clahe_grid_size": [[6, 1], [7, 1]],
-        "min_cluster_area": [600, 700],
-        "min_samples": [3, 4],
+        "clahe_clip_limit": [3.0, 5.0],
+        "clahe_grid_size": [[6, 1], [8, 1]],
+        "contrast_threshold": [0.02, 0.09],
+        "eps": [13, 20],
+        "min_cluster_area": [800],
+        "min_samples": [3, 8],
+        "n_octave_layers": [2, 10],
         "ransac": [True, False],
-        "ransac_threshold": [4, 5]
+        "ransac_threshold": [5, 10]
     }
