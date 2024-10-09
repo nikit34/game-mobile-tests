@@ -4,11 +4,11 @@
     8,
     1
   ],
-  "contrast_threshold": 0.04,
+  "contrast_threshold": 0.03,
   "eps": 15,
   "min_cluster_area": 500,
-  "min_samples": 5,
+  "min_samples": 4,
   "n_octave_layers": 3,
   "ransac": true,
-  "ransac_threshold": 10
+  "ransac_threshold": 9
 }
