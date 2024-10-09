@@ -4,7 +4,7 @@
         8,
         1
     ],
-    "contrast_threshold": 0.015,
+    "contrast_threshold": 0.03,
     "eps": 15,
     "min_cluster_area": 500,
     "min_samples": 4,
