@@ -2,7 +2,6 @@ from multiprocessing import Pool, Manager, cpu_count
 from sklearn.model_selection import ParameterGrid
 import json
 from datetime import datetime
-from tqdm import tqdm
 from src.files_manager import FilesManager
 from src.image import Image
 from src.image_detector import ImageDetector
@@ -78,7 +77,7 @@ class ParameterTuner:
                 ) for params in param_grid]
             )
 
-            for result in tqdm(results):
+            for result in results:
                 total_error, params = result
 
                 if total_error is None or total_error == float('inf'):
