@@ -94,5 +94,5 @@ if __name__ == "__main__":
     tuner = ParameterTuner(ImageDetector, TARGET.PARAM_GRID, TARGET.THRESHOLD_ERRORS)
     selected_test_data = TARGET.TEST_DATA
     best_params, best_total_error = tuner.evaluate(selected_test_data, TARGET.ERROR_CALLBACK)
-    print("Optimal parameters found: \n" + str(best_params) + "\nWith total error: " + str(best_total_error))
+    print("Best parameters found: \n" + str(best_params) + "\nWith total error: " + str(best_total_error))
     ParameterTuner._save_params(best_params, move_to_configs=True, name_target=TARGET.NAME_TARGET)
