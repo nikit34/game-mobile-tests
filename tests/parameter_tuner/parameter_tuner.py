@@ -32,7 +32,7 @@ class ParameterTuner:
         if stop_flag.value:
             return None, None
 
-        total_error = 0
+        total_error = -1
         for test_item in test_data:
             image_detector = self.image_detector_class(test_item.get("target"), save_img=False)
             image_detector.n_octave_layers = params['n_octave_layers']
@@ -52,7 +52,9 @@ class ParameterTuner:
             error = error_callback(detected_clusters, test_item.get("expected_clusters"))
             total_error += error
 
-        if total_error <= self.threshold_errors:
+        if total_error == -1:
+            stop_flag.value = True
+        elif total_error <= self.threshold_errors:
             print("Optimal parameters found: \n" + str(params) + "\nWith total error: " + str(total_error))
             self._save_params(params)
             stop_flag.value = True
@@ -72,7 +74,7 @@ class ParameterTuner:
             for result in tqdm(results):
                 total_error, params = result
 
-                if total_error is None:
+                if total_error is None or total_error == float('inf'):
                     continue
 
                 if total_error < self.best_total_error:
@@ -80,14 +82,14 @@ class ParameterTuner:
                     self.best_params = params
 
                 if stop_flag.value:
-                    print("Zero error found, stopping further evaluations")
+                    print("Stopping further evaluations")
                     break
 
         return self.best_params, self.best_total_error
 
 
 if __name__ == "__main__":
-    TARGET = EmptyFieldTarget
+    TARGET = ErnieTarget
 
     files_manager = FilesManager()
     files_manager.remove("params_tuner")
@@ -95,5 +97,8 @@ if __name__ == "__main__":
     tuner = ParameterTuner(ImageDetector, TARGET.PARAM_GRID, TARGET.THRESHOLD_ERRORS)
     selected_test_data = TARGET.TEST_DATA
     best_params, best_total_error = tuner.evaluate(selected_test_data, TARGET.ERROR_CALLBACK)
-    print("Best parameters found: \n" + str(best_params) + "\nWith total error: " + str(best_total_error))
-    ParameterTuner._save_params(best_params, move_to_configs=True, name_target=TARGET.NAME_TARGET)
+    if best_total_error == -1:
+        print("Model found nothing")
+    elif best_params is not None:
+        print("Best parameters found: \n" + str(best_params) + "\nWith total error: " + str(best_total_error))
+        ParameterTuner._save_params(best_params, move_to_configs=True, name_target=TARGET.NAME_TARGET)
