@@ -31,4 +31,6 @@ class TestBase:
 
         for detected, expected in zip(detected_clusters_sorted, expected_clusters_sorted):
             if not self._is_within_bounds(detected, expected, self.tolerance):
-                raise AssertionError("Cluster " + str(detected) + " is out of bounds " + str(expected))
+                raise AssertionError("Cluster " + str(detected) + " is out of bounds " + str(expected) + "\n" +
+                                     "detected_clusters_sorted=" + str(detected_clusters_sorted) + "\n" +
+                                     "expected_clusters_sorted=" + str(expected_clusters_sorted))
