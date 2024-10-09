@@ -3,10 +3,11 @@ from sklearn.model_selection import ParameterGrid
 import json
 from datetime import datetime
 
+from tqdm import tqdm
+
 from src.files_manager import FilesManager
 from src.image import Image
 from src.image_detector import ImageDetector
-from tests.parameter_tuner.feedbacks import feedback_cluster_within_bounds
 from tests.parameter_tuner.targets.empty_field import EmptyFieldTarget
 
 
@@ -67,7 +68,7 @@ class ParameterTuner:
 
             pool.close()
 
-            for result in results:
+            for result in tqdm(results):
                 total_error, params = result.get()
 
                 if total_error is None:
