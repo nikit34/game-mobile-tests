@@ -54,9 +54,7 @@ class ParameterTuner:
             error = self.error_callback(detected_clusters, test_item.get("expected_clusters"))
             total_error += error
 
-        if total_error == -1:
-            stop_flag.value = True
-        elif total_error <= self.threshold_errors:
+        if total_error <= self.threshold_errors and total_error != -1:
             print("Optimal parameters found: \n" + str(params) + "\nWith total error: " + str(total_error))
             self._save_params(params)
             stop_flag.value = True
