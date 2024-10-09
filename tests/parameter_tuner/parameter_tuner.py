@@ -7,7 +7,7 @@ from src.files_manager import FilesManager
 from src.image import Image
 from src.image_detector import ImageDetector
 from tests.parameter_tuner.feedbacks import feedback_cluster_within_bounds
-from tests.parameter_tuner.test_data import test_data
+from tests.parameter_tuner.targets.empty_field import EmptyFieldTarget
 
 
 class ParameterTuner:
@@ -88,9 +88,7 @@ class ParameterTuner:
 
 
 if __name__ == "__main__":
-    NEED_TEST_DATA_INDEXES = [0, 1, 2, 3]
-    NEED_ERROR_CALLBACK = feedback_cluster_within_bounds
-    THRESHOLD_ERRORS = 200
+    TARGET = EmptyFieldTarget
 
     param_grid = {
         "n_octave_layers": [3, 5, 15, 50],
@@ -107,7 +105,7 @@ if __name__ == "__main__":
     files_manager = FilesManager()
     files_manager.remove("params_tuner")
 
-    tuner = ParameterTuner(ImageDetector, param_grid, THRESHOLD_ERRORS)
-    selected_test_data = [test_data[i] for i in NEED_TEST_DATA_INDEXES]
-    best_params, best_total_error = tuner.evaluate(selected_test_data, NEED_ERROR_CALLBACK)
+    tuner = ParameterTuner(ImageDetector, param_grid, TARGET.THRESHOLD_ERRORS)
+    selected_test_data = TARGET.TEST_DATA
+    best_params, best_total_error = tuner.evaluate(selected_test_data, TARGET.ERROR_CALLBACK)
     print("Optimal parameters found: \n" + str(best_params) + "\nWith total error: " + str(best_total_error))
