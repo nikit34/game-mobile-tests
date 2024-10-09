@@ -1,4 +1,5 @@
 from configs.images_checker_config import ImagesCheckerConfig
+from tests.test_base import TestBase
 
 
 def feedback_count_clusters(detected_clusters, expected_clusters):
@@ -17,7 +18,7 @@ def feedback_cluster_within_bounds(detected_clusters, expected_clusters):
     total_mismatch = 0
 
     for detected, expected in zip(detected_clusters_sorted, expected_clusters_sorted):
-        if not _is_within_bounds(detected, expected, tolerance):
+        if not TestBase._is_within_bounds(detected, expected, tolerance):
             total_mismatch += (
                     abs(detected[0][0] - expected[0][0]) +
                     abs(detected[0][1] - expected[0][1]) +
@@ -29,15 +30,3 @@ def feedback_cluster_within_bounds(detected_clusters, expected_clusters):
     total_mismatch += missing_clusters * 1000
 
     return total_mismatch
-
-
-def _is_within_bounds(cluster, expected_cluster, tolerance):
-    ((x_min1, y_min1), (x_max1, y_max1)) = cluster
-    ((x_min2, y_min2), (x_max2, y_max2)) = expected_cluster
-
-    return (
-            abs(x_min1 - x_min2) <= tolerance and
-            abs(y_min1 - y_min2) <= tolerance and
-            abs(x_max1 - x_max2) <= tolerance and
-            abs(y_max1 - y_max2) <= tolerance
-    )
