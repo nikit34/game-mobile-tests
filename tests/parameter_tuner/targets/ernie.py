@@ -5,14 +5,37 @@ from tests.parameter_tuner.feedbacks import feedback_cluster_within_bounds
 class ErnieTarget:
     NAME_TARGET = "ernie"
 
-    COUNT_POLYGONS = 4
     TEST_DATA = [
         {
-            "original_img": "screenshots/test_detection_" + str(i) + ".png",
+            "original_img": "screenshots/test_detection_0.png",
+            "template_img": "app/elements/img/ernie_element.png",
+            "expected_clusters": ErnieElement.COORDINATES_ERNIE
+        },
+        {
+            "original_img": "screenshots/test_detection_1.png",
+            "template_img": "app/elements/img/ernie_element.png",
+            "expected_clusters": ErnieElement.COORDINATES_ERNIE
+        },
+        {
+            "original_img": "screenshots/test_detection_2.png",
+            "template_img": "app/elements/img/ernie_element.png",
+            "expected_clusters": ErnieElement.COORDINATES_ERNIE
+        },
+        {
+            "original_img": "screenshots/test_detection_3.png",
+            "template_img": "app/elements/img/ernie_element.png",
+            "expected_clusters": ErnieElement.COORDINATES_ERNIE
+        },
+        {
+            "original_img": "screenshots/test_detection_4.png",
+            "template_img": "app/elements/img/ernie_element.png",
+            "expected_clusters": ErnieElement.COORDINATES_ERNIE
+        },
+        {
+            "original_img": "screenshots/test_detection_5.png",
             "template_img": "app/elements/img/ernie_element.png",
             "expected_clusters": ErnieElement.COORDINATES_ERNIE
         }
-        for i in range(COUNT_POLYGONS)
     ]
 
     THRESHOLD_ERRORS = 200
