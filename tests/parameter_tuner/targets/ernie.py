@@ -8,7 +8,6 @@ class ErnieTarget:
     COUNT_POLYGONS = 4
     TEST_DATA = [
         {
-            "target": "ernie",
             "original_img": "screenshots/test_detection_" + str(i) + ".png",
             "template_img": "app/elements/img/ernie_element.png",
             "expected_clusters": ErnieElement.COORDINATES_ERNIE
@@ -20,13 +19,13 @@ class ErnieTarget:
     ERROR_CALLBACK = feedback_cluster_within_bounds
 
     PARAM_GRID = {
-        "clahe_clip_limit": [3.0, 5.0],
-        "clahe_grid_size": [[6, 1], [8, 1]],
-        "contrast_threshold": [0.02, 0.09],
-        "eps": [13, 20],
-        "min_cluster_area": [800],
-        "min_samples": [3, 8],
-        "n_octave_layers": [2, 10],
+        "clahe_clip_limit": [2.0, 3.0],
+        "clahe_grid_size": [[1, 1], [5, 1]],
+        "contrast_threshold": [0.01, 0.02],
+        "eps": [30, 50],
+        "min_cluster_area": [1000],
+        "min_samples": [1, 3],
+        "n_octave_layers": [2, 50],
         "ransac": [True, False],
-        "ransac_threshold": [5, 10]
+        "ransac_threshold": [3, 5]
     }

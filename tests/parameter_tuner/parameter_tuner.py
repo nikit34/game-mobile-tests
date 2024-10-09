@@ -11,12 +11,14 @@ from tests.parameter_tuner.targets.ernie import ErnieTarget
 
 
 class ParameterTuner:
-    def __init__(self, image_detector_class, param_grid, threshold_errors):
+    def __init__(self, image_detector_class, name_target, param_grid, error_callback, threshold_errors):
         self.image_detector_class = image_detector_class
+        self.name_target = name_target
         self.param_grid = param_grid
         self.best_params = None
         self.best_total_error = float('inf')
         self.n_jobs = int(cpu_count() / 2)
+        self.error_callback = error_callback
         self.threshold_errors = threshold_errors
 
     @staticmethod
@@ -28,13 +30,13 @@ class ParameterTuner:
                 with open('../configs/json/images_detectors/' + name_target + '.json', 'w') as f:
                     json.dump(params, f, indent=4)
 
-    def evaluate_single_param(self, params, test_data, error_callback, stop_flag):
+    def evaluate_single_param(self, params, test_data, stop_flag):
         if stop_flag.value:
             return None, None
 
         total_error = -1
         for test_item in test_data:
-            image_detector = self.image_detector_class(test_item.get("target"), save_img=False)
+            image_detector = self.image_detector_class(self.name_target, save_img=False)
             image_detector.n_octave_layers = params['n_octave_layers']
             image_detector.contrast_threshold = params['contrast_threshold']
             image_detector.eps = params['eps']
@@ -49,7 +51,7 @@ class ParameterTuner:
             template_img = Image(path_image=test_item.get("template_img"))
 
             detected_clusters = image_detector.get_coordinates_objects(original_img, template_img)
-            error = error_callback(detected_clusters, test_item.get("expected_clusters"))
+            error = self.error_callback(detected_clusters, test_item.get("expected_clusters"))
             total_error += error
 
         if total_error == -1:
@@ -61,7 +63,7 @@ class ParameterTuner:
 
         return total_error, params
 
-    def evaluate(self, test_data, error_callback):
+    def evaluate(self, test_data):
         manager = Manager()
         stop_flag = manager.Value('i', False)
 
@@ -69,7 +71,14 @@ class ParameterTuner:
         test_data_shared = manager.list(test_data)
 
         with Pool(processes=self.n_jobs) as pool:
-            results = pool.starmap(self.evaluate_single_param, [(params, test_data_shared, error_callback, stop_flag) for params in param_grid])
+            results = pool.starmap(
+                self.evaluate_single_param,
+                [(
+                    params,
+                    test_data_shared,
+                    stop_flag
+                ) for params in param_grid]
+            )
 
             for result in tqdm(results):
                 total_error, params = result
@@ -94,9 +103,8 @@ if __name__ == "__main__":
     files_manager = FilesManager()
     files_manager.remove("params_tuner")
 
-    tuner = ParameterTuner(ImageDetector, TARGET.PARAM_GRID, TARGET.THRESHOLD_ERRORS)
-    selected_test_data = TARGET.TEST_DATA
-    best_params, best_total_error = tuner.evaluate(selected_test_data, TARGET.ERROR_CALLBACK)
+    tuner = ParameterTuner(ImageDetector, TARGET.NAME_TARGET, TARGET.PARAM_GRID, TARGET.ERROR_CALLBACK, TARGET.THRESHOLD_ERRORS)
+    best_params, best_total_error = tuner.evaluate(TARGET.TEST_DATA)
     if best_total_error == -1:
         print("Model found nothing")
     elif best_params is not None:

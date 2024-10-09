@@ -7,61 +7,51 @@ class EmptyFieldTarget:
 
     TEST_DATA = (
         {
-            "target": "empty_field",
             "original_img": "screenshots/test_detection_1.png",
             "template_img": "app/elements/img/empty_field_element_1.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         },
         {
-            "target": "empty_field",
             "original_img": "screenshots/test_detection_2.png",
             "template_img": "app/elements/img/empty_field_element_1.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         },
         {
-            "target": "empty_field",
             "original_img": "screenshots/test_detection_3.png",
             "template_img": "app/elements/img/empty_field_element_1.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         },
         {
-            "target": "empty_field",
             "original_img": "screenshots/test_detection_4.png",
             "template_img": "app/elements/img/empty_field_element_1.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         },
         {
-            "target": "empty_field",
             "original_img": "screenshots/test_detection_5.png",
             "template_img": "app/elements/img/empty_field_element_1.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         },
         {
-            "target": "empty_field",
             "original_img": "screenshots/test_detection_1.png",
             "template_img": "app/elements/img/empty_field_element_2.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_2
         },
         {
-            "target": "empty_field",
             "original_img": "screenshots/test_detection_2.png",
             "template_img": "app/elements/img/empty_field_element_2.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_2
         },
         {
-            "target": "empty_field",
             "original_img": "screenshots/test_detection_3.png",
             "template_img": "app/elements/img/empty_field_element_2.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_2
         },
         {
-            "target": "empty_field",
             "original_img": "screenshots/test_detection_4.png",
             "template_img": "app/elements/img/empty_field_element_2.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_2
         },
         {
-            "target": "empty_field",
             "original_img": "screenshots/test_detection_5.png",
             "template_img": "app/elements/img/empty_field_element_2.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_2
