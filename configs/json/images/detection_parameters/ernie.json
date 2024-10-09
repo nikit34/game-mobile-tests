@@ -7,8 +7,8 @@
     "contrast_threshold": 0.01,
     "eps": 13,
     "min_cluster_area": 1000,
-    "min_samples": 4,
-    "n_octave_layers": 3,
-    "ransac": false,
+    "min_samples": 1,
+    "n_octave_layers": 10,
+    "ransac": true,
     "ransac_threshold": 2
 }
