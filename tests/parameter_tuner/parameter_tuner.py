@@ -84,13 +84,9 @@ class ParameterTuner:
                 if total_error is None or total_error == float('inf'):
                     continue
 
-                if total_error < self.best_total_error:
+                if total_error < self.best_total_error and total_error != -1:
                     self.best_total_error = total_error
                     self.best_params = params
-
-                if stop_flag.value:
-                    print("Stopping further evaluations")
-                    break
 
         return self.best_params, self.best_total_error
 
