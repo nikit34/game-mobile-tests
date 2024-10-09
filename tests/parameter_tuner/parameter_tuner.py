@@ -84,15 +84,15 @@ if __name__ == "__main__":
     TARGET = EmptyFieldTarget
 
     param_grid = {
-        "n_octave_layers": [3, 5, 15, 50],
-        "contrast_threshold": [0.02, 0.04],
-        "eps": [5, 10, 15, 20],
-        "clahe_clip_limit": [5.0, 7.0, 9.0],
-        "clahe_grid_size": [[8, 1], [8, 8]],
+        "n_octave_layers": [2, 3, 4],
+        "contrast_threshold": [0.04, 0.05],
+        "eps": [13, 15, 17],
+        "clahe_clip_limit": [4.0, 5.0],
+        "clahe_grid_size": [[8, 1], [8, 2]],
         "min_cluster_area": [500],
-        "min_samples": [3, 5, 9],
-        "ransac": [False, True],
-        "ransac_threshold": [10]
+        "min_samples": [5, 6],
+        "ransac": [True],
+        "ransac_threshold": [5, 10]
     }
 
     files_manager = FilesManager()
