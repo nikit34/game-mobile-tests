@@ -2,14 +2,11 @@ from multiprocessing import Pool, Manager, cpu_count
 from sklearn.model_selection import ParameterGrid
 import json
 from datetime import datetime
-
 from tqdm import tqdm
-
 from src.files_manager import FilesManager
 from src.image import Image
 from src.image_detector import ImageDetector
 from tests.parameter_tuner.targets.empty_field import EmptyFieldTarget
-
 
 class ParameterTuner:
     def __init__(self, image_detector_class, param_grid, threshold_errors):
@@ -60,16 +57,14 @@ class ParameterTuner:
         manager = Manager()
         stop_flag = manager.Value('i', False)
 
-        with Pool(processes=self.n_jobs) as pool:
-            results = []
-            for params in ParameterGrid(self.param_grid):
-                result = pool.apply_async(self.evaluate_single_param, (params, test_data, error_callback, stop_flag))
-                results.append(result)
+        param_grid = list(ParameterGrid(self.param_grid))
+        test_data_shared = manager.list(test_data)
 
-            pool.close()
+        with Pool(processes=self.n_jobs) as pool:
+            results = pool.starmap(self.evaluate_single_param, [(params, test_data_shared, error_callback, stop_flag) for params in param_grid])
 
             for result in tqdm(results):
-                total_error, params = result.get()
+                total_error, params = result
 
                 if total_error is None:
                     continue
@@ -80,10 +75,7 @@ class ParameterTuner:
 
                 if stop_flag.value:
                     print("Zero error found, stopping further evaluations")
-                    pool.terminate()
                     break
-
-            pool.join()
 
         return self.best_params, self.best_total_error
 
