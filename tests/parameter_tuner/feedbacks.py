@@ -7,7 +7,8 @@ def feedback_count_clusters(detected_clusters, expected_clusters):
 
 
 def feedback_cluster_within_bounds(detected_clusters, expected_clusters):
-    tolerance = ImagesCheckerConfig.get_tolerance()
+    train_tolerance = ImagesCheckerConfig.get_train_tolerance()
+    train_factor_count_error = ImagesCheckerConfig.get_train_factor_count_error()
 
     if not detected_clusters:
         return float('inf')
@@ -18,7 +19,7 @@ def feedback_cluster_within_bounds(detected_clusters, expected_clusters):
     total_mismatch = 0
 
     for detected, expected in zip(detected_clusters_sorted, expected_clusters_sorted):
-        if not TestBase._is_within_bounds(detected, expected, tolerance):
+        if not TestBase._is_within_bounds(detected, expected, train_tolerance):
             total_mismatch += (
                     abs(detected[0][0] - expected[0][0]) +
                     abs(detected[0][1] - expected[0][1]) +
@@ -27,6 +28,6 @@ def feedback_cluster_within_bounds(detected_clusters, expected_clusters):
             )
 
     missing_clusters = abs(len(detected_clusters_sorted) - len(expected_clusters_sorted))
-    total_mismatch += missing_clusters * 1000
+    total_mismatch += missing_clusters * train_factor_count_error
 
     return total_mismatch

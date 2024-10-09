@@ -1,3 +1,5 @@
 {
-  "tolerance": 50
+  "tolerance": 50,
+  "train_tolerance": 5,
+  "train_factor_count_error": 1000
 }
