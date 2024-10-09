@@ -1,4 +1,4 @@
 class ErnieElement:
     COORDINATES_ERNIE = (
-        ((50, 300), (150, 350)),
+        ((50, 300), (120, 350)),
     )

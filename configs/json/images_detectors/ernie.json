@@ -1,14 +1,14 @@
 {
-    "clahe_clip_limit": 5.0,
-    "clahe_grid_size": [
-        8,
-        1
-    ],
-    "contrast_threshold": 0.04,
-    "eps": 15,
-    "min_cluster_area": 500,
-    "min_samples": 3,
-    "n_octave_layers": 3,
-    "ransac": true,
-    "ransac_threshold": 10
+  "clahe_clip_limit": 3.0,
+  "clahe_grid_size": [
+    7,
+    1
+  ],
+  "contrast_threshold": 0.02,
+  "eps": 13,
+  "min_cluster_area": 600,
+  "min_samples": 3,
+  "n_octave_layers": 2,
+  "ransac": true,
+  "ransac_threshold": 5
 }
