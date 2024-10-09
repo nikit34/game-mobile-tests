@@ -1,4 +1,4 @@
-from configs.images_checker_config import ImagesCheckerConfig
+from configs.images.checker_config import ImagesCheckerConfig
 from src.files_manager import FilesManager
 
 

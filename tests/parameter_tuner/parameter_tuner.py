@@ -27,7 +27,7 @@ class ParameterTuner:
             with open('params_tuner/params_tuner-' + str(datetime.now()) + '.json', 'w') as f:
                 json.dump(params, f, indent=4)
             if move_to_configs and name_target is not None:
-                with open('../configs/json/images_detectors/' + name_target + '.json', 'w') as f:
+                with open('../configs/json/images/detection_parameters/' + name_target + '.json', 'w') as f:
                     json.dump(params, f, indent=4)
 
     def evaluate_single_param(self, params, test_data, stop_flag):

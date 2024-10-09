@@ -2,7 +2,7 @@ from configs._config import Config
 
 
 class ImagesDetectorConfig(Config):
-    FOLDER_CONFIG = 'json/images_detectors/'
+    FOLDER_CONFIG = 'json/images/detection_parameters/'
 
     def __init__(self, name_target):
         self.config = self.get_images_detector(name_target)

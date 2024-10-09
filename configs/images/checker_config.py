@@ -2,7 +2,7 @@ from configs._config import Config
 
 
 class ImagesCheckerConfig(Config):
-    CONFIG = 'json/images_checker.json'
+    CONFIG = 'json/images/checker.json'
 
     @classmethod
     def get_tolerance(cls):

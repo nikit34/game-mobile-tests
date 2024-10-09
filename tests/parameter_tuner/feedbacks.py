@@ -1,4 +1,4 @@
-from configs.images_checker_config import ImagesCheckerConfig
+from configs.images.checker_config import ImagesCheckerConfig
 from tests.test_base import TestBase
 
 

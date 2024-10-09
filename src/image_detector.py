@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from sklearn.cluster import DBSCAN
-from configs.images_detector_config import ImagesDetectorConfig
+from configs.images.detector_config import ImagesDetectorConfig
 
 
 class ImageDetector:
