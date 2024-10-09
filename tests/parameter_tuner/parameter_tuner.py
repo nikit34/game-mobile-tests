@@ -83,7 +83,7 @@ class ParameterTuner:
 
 
 if __name__ == "__main__":
-    TARGET = ErnieTarget
+    TARGET = EmptyFieldTarget
 
     files_manager = FilesManager()
     files_manager.remove("params_tuner")
