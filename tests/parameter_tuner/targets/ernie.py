@@ -21,6 +21,18 @@ class ErnieTarget:
             "original_img": "screenshots/test_detection_3.png",
             "template_img": "app/elements/img/ernie_element.png",
             "expected_clusters": ErnieElement.COORDINATES_ERNIE
+        },
+        {
+            "target": "ernie",
+            "original_img": "screenshots/test_detection_4.png",
+            "template_img": "app/elements/img/ernie_element.png",
+            "expected_clusters": ErnieElement.COORDINATES_ERNIE
+        },
+        {
+            "target": "ernie",
+            "original_img": "screenshots/test_detection_5.png",
+            "template_img": "app/elements/img/ernie_element.png",
+            "expected_clusters": ErnieElement.COORDINATES_ERNIE
         }
     )
 
