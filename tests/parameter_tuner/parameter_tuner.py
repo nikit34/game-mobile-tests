@@ -20,9 +20,12 @@ class ParameterTuner:
         self.threshold_errors = threshold_errors
 
     @staticmethod
-    def _save_params(params):
+    def _save_params(params, move_to_configs=False, name_target=None):
         with open('params_tuner/params_tuner-' + str(datetime.now()) + '.json', 'w') as f:
             json.dump(params, f, indent=4)
+        if move_to_configs and name_target is not None:
+            with open('../configs/json/images_detectors/' + name_target + '.json', 'w') as f:
+                json.dump(params, f, indent=4)
 
     def evaluate_single_param(self, params, test_data, error_callback, stop_flag):
         if stop_flag.value:
@@ -92,3 +95,4 @@ if __name__ == "__main__":
     selected_test_data = TARGET.TEST_DATA
     best_params, best_total_error = tuner.evaluate(selected_test_data, TARGET.ERROR_CALLBACK)
     print("Optimal parameters found: \n" + str(best_params) + "\nWith total error: " + str(best_total_error))
+    ParameterTuner._save_params(best_params, move_to_configs=True, name_target=TARGET.NAME_TARGET)

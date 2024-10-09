@@ -3,6 +3,8 @@ from tests.parameter_tuner.feedbacks import feedback_cluster_within_bounds
 
 
 class ErnieTarget:
+    NAME_TARGET = "ernie"
+
     TEST_DATA = (
         {
             "target": "ernie",

@@ -3,6 +3,8 @@ from tests.parameter_tuner.feedbacks import feedback_cluster_within_bounds
 
 
 class EmptyFieldTarget:
+    NAME_TARGET = "empty_field"
+
     TEST_DATA = (
         {
             "target": "empty_field",
