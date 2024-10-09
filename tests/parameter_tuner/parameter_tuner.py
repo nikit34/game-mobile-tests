@@ -7,6 +7,8 @@ from src.files_manager import FilesManager
 from src.image import Image
 from src.image_detector import ImageDetector
 from tests.parameter_tuner.targets.empty_field import EmptyFieldTarget
+from tests.parameter_tuner.targets.ernie import ErnieTarget
+
 
 class ParameterTuner:
     def __init__(self, image_detector_class, param_grid, threshold_errors):
@@ -81,24 +83,12 @@ class ParameterTuner:
 
 
 if __name__ == "__main__":
-    TARGET = EmptyFieldTarget
-
-    param_grid = {
-        "n_octave_layers": [2, 3, 4],
-        "contrast_threshold": [0.04, 0.05],
-        "eps": [13, 15, 17],
-        "clahe_clip_limit": [4.0, 5.0],
-        "clahe_grid_size": [[8, 1], [8, 2]],
-        "min_cluster_area": [500],
-        "min_samples": [5, 6],
-        "ransac": [True],
-        "ransac_threshold": [5, 10]
-    }
+    TARGET = ErnieTarget
 
     files_manager = FilesManager()
     files_manager.remove("params_tuner")
 
-    tuner = ParameterTuner(ImageDetector, param_grid, TARGET.THRESHOLD_ERRORS)
+    tuner = ParameterTuner(ImageDetector, TARGET.PARAM_GRID, TARGET.THRESHOLD_ERRORS)
     selected_test_data = TARGET.TEST_DATA
     best_params, best_total_error = tuner.evaluate(selected_test_data, TARGET.ERROR_CALLBACK)
     print("Optimal parameters found: \n" + str(best_params) + "\nWith total error: " + str(best_total_error))
