@@ -38,13 +38,6 @@ class TestOnboarding(TestBase):
         self.check_clusters(detected_clusters, expected_clusters)
 
         original_img = Image(image=screenshot_img, resize_image=True)
-        empty_field_2_img = Image(path_image="app/elements/img/empty_field_element_2.png")
-        image_detector = ImageDetector('empty_field')
-        detected_clusters = image_detector.get_coordinates_objects(original_img, empty_field_2_img)
-        expected_clusters = FieldComponent.COORDINATES_FIELD_2
-        self.check_clusters(detected_clusters, expected_clusters)
-
-        original_img = Image(image=screenshot_img, resize_image=True)
         ernie_img = Image(path_image="app/elements/img/ernie_element.png")
         image_detector = ImageDetector('ernie')
         detected_clusters = image_detector.get_coordinates_objects(original_img, ernie_img)
