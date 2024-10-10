@@ -11,7 +11,7 @@ from src.image.image import Image
 from src.image.image_detector import ImageDetector
 from src.parameter_tuner.targets.ernie import ErnieTarget
 from src.parameter_tuner.targets.empty_field import EmptyFieldTarget
-
+from src.parameter_tuner.targets.wheat import WheatTarget
 
 
 class ParameterTuner:
@@ -107,7 +107,7 @@ class ParameterTuner:
 
 
 if __name__ == "__main__":
-    TARGET = EmptyFieldTarget
+    TARGET = WheatTarget
 
     file_manager = FileManager()
     file_manager.remove("parameter_tuner/tmp_params")

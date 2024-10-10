@@ -1,0 +1,14 @@
+{
+    "clahe_clip_limit": 1.0,
+    "clahe_grid_size": [
+        1,
+        1
+    ],
+    "contrast_threshold": 0.01,
+    "eps": 10,
+    "min_cluster_area": 400,
+    "min_samples": 1,
+    "n_octave_layers": 5,
+    "ransac": true,
+    "ransac_threshold": 2
+}
