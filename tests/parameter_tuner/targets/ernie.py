@@ -7,27 +7,27 @@ class ErnieTarget:
 
     TEST_DATA = [
         {
-            "original_img": "screenshots/test_detection_1.png",
+            "original_img": "screenshots/empty_fields_ernie_0.png",
             "template_img": "app/elements/img/ernie_element.png",
             "expected_clusters": ErnieElement.COORDINATES_ERNIE
         },
         {
-            "original_img": "screenshots/test_detection_2.png",
+            "original_img": "screenshots/empty_fields_ernie_1.png",
             "template_img": "app/elements/img/ernie_element.png",
             "expected_clusters": ErnieElement.COORDINATES_ERNIE
         },
         {
-            "original_img": "screenshots/test_detection_3.png",
+            "original_img": "screenshots/empty_fields_ernie_2.png",
             "template_img": "app/elements/img/ernie_element.png",
             "expected_clusters": ErnieElement.COORDINATES_ERNIE
         },
         {
-            "original_img": "screenshots/test_detection_4.png",
+            "original_img": "screenshots/empty_fields_ernie_3.png",
             "template_img": "app/elements/img/ernie_element.png",
             "expected_clusters": ErnieElement.COORDINATES_ERNIE
         },
         {
-            "original_img": "screenshots/test_detection_5.png",
+            "original_img": "screenshots/empty_fields_ernie_4.png",
             "template_img": "app/elements/img/ernie_element.png",
             "expected_clusters": ErnieElement.COORDINATES_ERNIE
         }

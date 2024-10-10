@@ -9,21 +9,21 @@ from tests.test_base import TestBase
 class TestDetection(TestBase):
     @pytest.mark.parametrize(
         "name_target, original_image_path, field_image_path, expected_clusters", [
-        ("empty_field", "screenshots/test_detection_1.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "screenshots/test_detection_2.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "screenshots/test_detection_3.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "screenshots/test_detection_4.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "screenshots/test_detection_5.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "screenshots/test_detection_1.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "screenshots/test_detection_2.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "screenshots/test_detection_3.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "screenshots/test_detection_4.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "screenshots/test_detection_5.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("ernie", "screenshots/test_detection_1.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "screenshots/test_detection_2.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "screenshots/test_detection_3.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "screenshots/test_detection_4.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "screenshots/test_detection_5.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE)
+        ("empty_field", "screenshots/empty_fields_ernie_0.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
+        ("empty_field", "screenshots/empty_fields_ernie_1.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
+        ("empty_field", "screenshots/empty_fields_ernie_2.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
+        ("empty_field", "screenshots/empty_fields_ernie_3.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
+        ("empty_field", "screenshots/empty_fields_ernie_4.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
+        ("empty_field", "screenshots/empty_fields_ernie_0.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("empty_field", "screenshots/empty_fields_ernie_1.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("empty_field", "screenshots/empty_fields_ernie_2.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("empty_field", "screenshots/empty_fields_ernie_3.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("empty_field", "screenshots/empty_fields_ernie_4.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("ernie", "screenshots/empty_fields_ernie_0.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
+        ("ernie", "screenshots/empty_fields_ernie_1.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
+        ("ernie", "screenshots/empty_fields_ernie_2.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
+        ("ernie", "screenshots/empty_fields_ernie_3.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
+        ("ernie", "screenshots/empty_fields_ernie_4.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE)
     ])
     def test_count_clusters(self, name_target, original_image_path, field_image_path, expected_clusters):
         image_detector = ImageDetector(name_target)
@@ -35,21 +35,21 @@ class TestDetection(TestBase):
         assert len(detected_clusters) == len(expected_clusters), "Number of clusters does not match."
 
     @pytest.mark.parametrize("name_target, original_image_path, field_image_path, expected_clusters", [
-        ("empty_field", "screenshots/test_detection_1.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "screenshots/test_detection_2.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "screenshots/test_detection_3.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "screenshots/test_detection_4.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "screenshots/test_detection_5.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "screenshots/test_detection_1.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "screenshots/test_detection_2.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "screenshots/test_detection_3.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "screenshots/test_detection_4.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "screenshots/test_detection_5.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("ernie", "screenshots/test_detection_1.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "screenshots/test_detection_2.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "screenshots/test_detection_3.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "screenshots/test_detection_4.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "screenshots/test_detection_5.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE)
+        ("empty_field", "screenshots/empty_fields_ernie_0.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
+        ("empty_field", "screenshots/empty_fields_ernie_1.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
+        ("empty_field", "screenshots/empty_fields_ernie_2.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
+        ("empty_field", "screenshots/empty_fields_ernie_3.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
+        ("empty_field", "screenshots/empty_fields_ernie_4.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
+        ("empty_field", "screenshots/empty_fields_ernie_0.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("empty_field", "screenshots/empty_fields_ernie_1.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("empty_field", "screenshots/empty_fields_ernie_2.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("empty_field", "screenshots/empty_fields_ernie_3.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("empty_field", "screenshots/empty_fields_ernie_4.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
+        ("ernie", "screenshots/empty_fields_ernie_0.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
+        ("ernie", "screenshots/empty_fields_ernie_1.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
+        ("ernie", "screenshots/empty_fields_ernie_2.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
+        ("ernie", "screenshots/empty_fields_ernie_3.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
+        ("ernie", "screenshots/empty_fields_ernie_4.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE)
     ])
     def test_cluster_within_bounds(self, name_target, original_image_path, field_image_path, expected_clusters):
         image_detector = ImageDetector(name_target)
