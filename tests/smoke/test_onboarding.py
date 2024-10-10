@@ -43,3 +43,12 @@ class TestOnboarding(TestBase):
         detected_clusters = image_detector.get_coordinates_objects(original_img, ernie_img)
         expected_clusters = ErnieElement.COORDINATES_ERNIE
         self.check_clusters(detected_clusters, expected_clusters)
+
+        ErnieElement(driver).click(detected_clusters)
+        FieldComponent(driver).click(FieldComponent.COORDINATES_FIELD_1[0])
+        sleep(2)
+        screenshot.save('test')
+
+
+
+
