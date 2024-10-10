@@ -3,6 +3,9 @@ from multiprocessing import Pool, Manager, cpu_count
 from sklearn.model_selection import ParameterGrid
 import json
 from datetime import datetime
+
+from tqdm import tqdm
+
 from src.file_manager import FileManager
 from src.image.image import Image
 from src.image.image_detector import ImageDetector
@@ -40,7 +43,7 @@ class ParameterTuner:
             return None, None
 
         total_error = -1
-        for test_item in test_data:
+        for test_item in tqdm(test_data):
             image_detector = self.image_detector_class(self.name_target, save_img=False)
             image_detector.n_octave_layers = params['n_octave_layers']
             image_detector.contrast_threshold = params['contrast_threshold']
