@@ -10,10 +10,12 @@ from src.file_manager import FileManager
 from src.image.image import Image
 from src.image.image_detector import ImageDetector
 from src.parameter_tuner.targets.ernie import ErnieTarget
+from src.parameter_tuner.targets.empty_field import EmptyFieldTarget
+
 
 
 class ParameterTuner:
-    def __init__(self, image_detector_class, name_target, param_grid, error_callback, threshold_errors):
+    def __init__(self, image_detector_class, name_target, param_grid, error_callback, threshold_errors, max_allowed_error):
         self.image_detector_class = image_detector_class
         self.name_target = name_target
         self.param_grid = param_grid
@@ -22,6 +24,7 @@ class ParameterTuner:
         self.n_jobs = int(cpu_count() / 2)
         self.error_callback = error_callback
         self.threshold_errors = threshold_errors
+        self.max_allowed_error = max_allowed_error
 
     @staticmethod
     def _save_params(params, move_to_configs=False, name_target=None):
@@ -62,6 +65,10 @@ class ParameterTuner:
             error = self.error_callback(detected_clusters, test_item.get("expected_clusters"))
             total_error += error
 
+            if total_error > self.max_allowed_error:
+                print("Skipping parameters due to high error: " + str(total_error) + " > " + self.max_allowed_error)
+                return float('inf'), params
+
         if total_error <= self.threshold_errors and total_error != -1:
             print("Optimal parameters found: \n" + str(params) + "\nWith total error: " + str(total_error))
             self._save_params(params)
@@ -100,12 +107,12 @@ class ParameterTuner:
 
 
 if __name__ == "__main__":
-    TARGET = ErnieTarget
+    TARGET = EmptyFieldTarget
 
     file_manager = FileManager()
     file_manager.remove("parameter_tuner/tmp_params")
 
-    tuner = ParameterTuner(ImageDetector, TARGET.NAME_TARGET, TARGET.PARAM_GRID, TARGET.ERROR_CALLBACK, TARGET.THRESHOLD_ERRORS)
+    tuner = ParameterTuner(ImageDetector, TARGET.NAME_TARGET, TARGET.PARAM_GRID, TARGET.ERROR_CALLBACK, TARGET.THRESHOLD_ERRORS, TARGET.MAX_ALLOWED_ERROR)
     best_params, best_total_error = tuner.evaluate(TARGET.TEST_DATA)
     if best_total_error == -1:
         print("Model found nothing")

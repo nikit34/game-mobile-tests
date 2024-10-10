@@ -14,6 +14,7 @@ class WheatTarget:
     ]
 
     THRESHOLD_ERRORS = 50
+    MAX_ALLOWED_ERROR = 500
     ERROR_CALLBACK = feedback_cluster_within_bounds
 
     PARAM_GRID = {

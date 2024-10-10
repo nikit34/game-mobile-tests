@@ -34,6 +34,7 @@ class ErnieTarget:
     ]
 
     THRESHOLD_ERRORS = 200
+    MAX_ALLOWED_ERROR = 1000
     ERROR_CALLBACK = feedback_cluster_within_bounds
 
     PARAM_GRID = {
