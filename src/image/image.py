@@ -17,9 +17,9 @@ def resize(func):
             raise ValueError("No image loaded to resize")
 
         if self.resize_image:
-            device_appium_config = DeviceConfig("iPhone 11")
+            device_config = DeviceConfig("iPhone 11")
 
-            target_width, target_height = device_appium_config.get_width(), device_appium_config.get_height()
+            target_width, target_height = device_config.get_width(), device_config.get_height()
             current_height, current_width = image.shape[:2]
 
             if current_width != target_width or current_height != target_height:
@@ -37,7 +37,7 @@ class Image(FileManager):
     @resize
     def _load_image(self, image, path_image, flags):
         if isinstance(image, str):
-            return self._decode_base64_image(image, flags)
+            return self.decode_base64_image(image, flags)
         elif isinstance(image, Path):
             return cv2.imread(str(image), flags)
         elif isinstance(path_image, str):
@@ -47,7 +47,7 @@ class Image(FileManager):
             raise TypeError("Input should be a base64 string or Path object with path to image file")
 
     @staticmethod
-    def _decode_base64_image(base64_string, flags):
+    def decode_base64_image(base64_string, flags):
         decoded_image = base64.b64decode(base64_string)
         image_array = np.frombuffer(decoded_image, dtype=np.uint8)
         return cv2.imdecode(image_array, flags=flags)
