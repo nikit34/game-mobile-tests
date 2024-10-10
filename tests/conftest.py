@@ -10,22 +10,21 @@ from configs.appium_config import AppiumConfig
 from configs.desired_caps_config import DesiredCapsConfig
 from configs.waiting_config import WaitingConfig
 from src.environment_manager import EnvironmentManager
-from src.path_creator import PathCreator
+from src.file_manager import FileManager
 
 
 @fixture(scope='function')
 def driver():
     desired_caps = DesiredCapsConfig.get_desired_caps()
-    path_creator = PathCreator()
 
     EnvironmentManager.execute_ios_callback(lambda: (
         desired_caps.update({
             'appium:usePrebuiltWDA': True,
-            'appium:derivedDataPath': path_creator.get_full_path(
+            'appium:derivedDataPath': FileManager.get_full_path(
                 os.path.expanduser("~/Library/Developer/Xcode/DerivedData/"), r"WebDriverAgent-[a-z]+"
             )
         })
-    ) if path_creator.get_full_path(
+    ) if FileManager.get_full_path(
         os.path.expanduser("~/Library/Developer/Xcode/DerivedData/"),
         r"WebDriverAgent-[a-z]+"
     ) else None)
