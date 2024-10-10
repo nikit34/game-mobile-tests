@@ -1,6 +1,6 @@
 {
   "platformName": "iOS",
-  "appium:udid": "00008030-000E65521444202E",
+  "appium:udid": "00008030-000A058C119B402E",
   "appium:fullReset": true,
   "appium:automationName": "XCUITest",
   "appium:bundleId": "com.playrix.township-ios",
