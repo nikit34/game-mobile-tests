@@ -1,30 +1,13 @@
 import pytest
-from src.app.components.field_component import FieldComponent
-from src.app.elements.ernie_element import ErnieElement
 from src.image.image import Image
 from src.image.image_detector import ImageDetector
 from tests.test_base import TestBase
+from tests.test_data.detection import TEST_DATA
 
 
 class TestDetection(TestBase):
     @pytest.mark.parametrize(
-        "name_target, original_image_path, field_image_path, expected_clusters", [
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_0.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_1.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_2.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_3.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_4.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_0.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_1.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_2.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_3.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_4.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("ernie", "app/screens/polygons/empty_fields_ernie_0.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "app/screens/polygons/empty_fields_ernie_1.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "app/screens/polygons/empty_fields_ernie_2.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "app/screens/polygons/empty_fields_ernie_3.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "app/screens/polygons/empty_fields_ernie_4.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE)
-    ])
+        "name_target, original_image_path, field_image_path, expected_clusters", TEST_DATA)
     def test_count_clusters(self, name_target, original_image_path, field_image_path, expected_clusters):
         image_detector = ImageDetector(name_target)
         original_img = Image(path_image=original_image_path, resize_image=True)
@@ -34,23 +17,7 @@ class TestDetection(TestBase):
 
         assert len(detected_clusters) == len(expected_clusters), "Number of clusters does not match."
 
-    @pytest.mark.parametrize("name_target, original_image_path, field_image_path, expected_clusters", [
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_0.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_1.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_2.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_3.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_4.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_0.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_1.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_2.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_3.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("empty_field", "app/screens/polygons/empty_fields_ernie_4.png", "app/elements/img/empty_field_element_2.png", FieldComponent.COORDINATES_FIELD_2),
-        ("ernie", "app/screens/polygons/empty_fields_ernie_0.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "app/screens/polygons/empty_fields_ernie_1.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "app/screens/polygons/empty_fields_ernie_2.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "app/screens/polygons/empty_fields_ernie_3.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE),
-        ("ernie", "app/screens/polygons/empty_fields_ernie_4.png", "app/elements/img/ernie_element.png", ErnieElement.COORDINATES_ERNIE)
-    ])
+    @pytest.mark.parametrize("name_target, original_image_path, field_image_path, expected_clusters", TEST_DATA)
     def test_cluster_within_bounds(self, name_target, original_image_path, field_image_path, expected_clusters):
         image_detector = ImageDetector(name_target)
         original_img = Image(path_image=original_image_path, resize_image=True)
