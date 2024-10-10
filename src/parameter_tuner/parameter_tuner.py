@@ -24,7 +24,7 @@ class ParameterTuner:
     def _save_params(params, move_to_configs=False, name_target=None):
         if params is not None:
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            file_path = os.path.join(current_dir, 'temporary_params', 'params_tuner-' + str(datetime.now()) + '.json')
+            file_path = os.path.join(current_dir, 'tmp_params', 'params_tuner-' + str(datetime.now()) + '.json')
             with open(file_path, 'w') as f:
                 json.dump(params, f, indent=4)
             if move_to_configs and name_target is not None:
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     TARGET = ErnieTarget
 
     file_manager = FileManager()
-    file_manager.remove("parameter_tuner/temporary_params")
+    file_manager.remove("parameter_tuner/tmp_params")
 
     tuner = ParameterTuner(ImageDetector, TARGET.NAME_TARGET, TARGET.PARAM_GRID, TARGET.ERROR_CALLBACK, TARGET.THRESHOLD_ERRORS)
     best_params, best_total_error = tuner.evaluate(TARGET.TEST_DATA)
