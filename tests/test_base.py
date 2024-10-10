@@ -1,3 +1,6 @@
+import functools
+import time
+
 from configs.images.checker_config import ImagesCheckerConfig
 from src.file_manager import FileManager
 
@@ -34,3 +37,19 @@ class TestBase:
                 raise AssertionError("Cluster " + str(detected) + " is out of bounds " + str(expected) + "\n" +
                                      "detected_clusters_sorted=" + str(detected_clusters_sorted) + "\n" +
                                      "expected_clusters_sorted=" + str(expected_clusters_sorted))
+
+    def wait_load(self, timeout=5):
+        def decorator(func):
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                start_time = time.time()
+                while time.time() - start_time < timeout:
+                    try:
+                        return func(*args, **kwargs)
+                    except Exception as e:
+                        print("Exception caught: " + str(e) + "\nRetrying...")
+                        time.sleep(1)
+                raise TimeoutError("Function " + func.__name__ + " did not complete in " + str(timeout) + " seconds")
+            return wrapper
+        return decorator
+
