@@ -28,7 +28,7 @@ class TestOnboarding(TestBase):
 
         screenshot = Screenshot(driver)
 
-        @self.wait_load(timeout=5)
+        @self.wait_load()
         def wait_load_clusters(screenshot, template_path_img, name_target, expected_clusters):
             screenshot_img = screenshot.get_screenshot()
             original_img = Image(image=screenshot_img, resize_image=True)

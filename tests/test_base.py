@@ -2,6 +2,7 @@ import functools
 import time
 
 from configs.images.checker_config import ImagesCheckerConfig
+from configs.waiting_config import WaitingConfig
 from src.file_manager import FileManager
 
 
@@ -38,7 +39,8 @@ class TestBase:
                                      "detected_clusters_sorted=" + str(detected_clusters_sorted) + "\n" +
                                      "expected_clusters_sorted=" + str(expected_clusters_sorted))
 
-    def wait_load(self, timeout=5):
+    @staticmethod
+    def wait_load(timeout=WaitingConfig.get_implicitly_timeout()):
         def decorator(func):
             @functools.wraps(func)
             def wrapper(*args, **kwargs):
