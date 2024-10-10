@@ -63,14 +63,14 @@ class EmptyFieldTarget:
     ERROR_CALLBACK = feedback_cluster_within_bounds
 
     PARAM_GRID = {
-        "clahe_clip_limit": [3.0, 4.0, 5.0],
-        "clahe_grid_size": [[8, 1], [1, 1]],
-        "contrast_threshold": [0.03, 0.045, 0.06],
-        "eps": [12, 15, 18],
-        "min_cluster_area": [500, 600, 700],
-        "min_samples": [6, 8, 10],
-        "n_octave_layers": [2, 3, 4],
-        "ransac": [True, False],
-        "ransac_threshold": [10, 13, 16]
+        "clahe_clip_limit": [2.0, 3.0],
+        "clahe_grid_size": [[1, 1]],
+        "contrast_threshold": [0.06, 0.08],
+        "eps": [18, 20],
+        "min_cluster_area": [400, 500],
+        "min_samples": [10, 12],
+        "n_octave_layers": [3],
+        "ransac": [False],
+        "ransac_threshold": [10]
     }
 
