@@ -45,7 +45,7 @@ class ParameterTuner:
         if stop_flag.value:
             return None, None
 
-        total_error = -1
+        total_error = 0
         for test_item in tqdm(test_data):
             image_detector = self.image_detector_class(self.name_target, save_img=False)
             image_detector.n_octave_layers = params['n_octave_layers']
@@ -67,9 +67,9 @@ class ParameterTuner:
 
             if total_error > self.max_allowed_error:
                 print("Skipping parameters due to high error: " + str(total_error) + " > " + str(self.max_allowed_error))
-                return float('inf'), params
+                return None, None
 
-        if total_error <= self.threshold_errors and total_error != -1:
+        if total_error <= self.threshold_errors:
             print("Optimal parameters found: \n" + str(params) + "\nWith total error: " + str(total_error))
             self._save_params(params, self.name_target)
             stop_flag.value = True
@@ -96,10 +96,10 @@ class ParameterTuner:
             for result in results:
                 total_error, params = result
 
-                if total_error is None or total_error == float('inf'):
+                if total_error is None:
                     continue
 
-                if total_error < self.best_total_error and total_error != -1:
+                if total_error < self.best_total_error:
                     self.best_total_error = total_error
                     self.best_params = params
 
@@ -114,8 +114,8 @@ if __name__ == "__main__":
 
     tuner = ParameterTuner(ImageDetector, TARGET.NAME_TARGET, TARGET.PARAM_GRID, TARGET.ERROR_CALLBACK, TARGET.THRESHOLD_ERRORS, TARGET.MAX_ALLOWED_ERROR)
     best_params, best_total_error = tuner.evaluate(TARGET.TEST_DATA)
-    if best_total_error == -1:
+    if best_params is None:
         print("Model found nothing")
-    elif best_params is not None:
+    else:
         print("Best parameters found: \n" + str(best_params) + "\nWith total error: " + str(best_total_error))
         ParameterTuner._save_params(best_params, TARGET.NAME_TARGET, move_to_configs=True)
