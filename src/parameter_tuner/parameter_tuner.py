@@ -66,7 +66,7 @@ class ParameterTuner:
             total_error += error
 
             if total_error > self.max_allowed_error:
-                print("Skipping parameters due to high error: " + str(total_error) + " > " + self.max_allowed_error)
+                print("Skipping parameters due to high error: " + str(total_error) + " > " + str(self.max_allowed_error))
                 return float('inf'), params
 
         if total_error <= self.threshold_errors and total_error != -1:
