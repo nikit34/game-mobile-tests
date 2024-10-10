@@ -27,13 +27,13 @@ class ParameterTuner:
         self.max_allowed_error = max_allowed_error
 
     @staticmethod
-    def _save_params(params, move_to_configs=False, name_target=None):
+    def _save_params(params, name_target, move_to_configs=False):
         if params is not None:
             current_dir = os.path.dirname(os.path.abspath(__file__))
-            file_path = os.path.join(current_dir, 'tmp_params', 'params_tuner-' + str(datetime.now()) + '.json')
+            file_path = os.path.join(current_dir, 'tmp_params', name_target + '-' + str(datetime.now()) + '.json')
             with open(file_path, 'w') as f:
                 json.dump(params, f, indent=4)
-            if move_to_configs and name_target is not None:
+            if move_to_configs:
                 two_levels_up_current_dir = os.path.dirname(os.path.dirname(current_dir))
                 file_path = os.path.join(
                     two_levels_up_current_dir, 'configs', 'json', 'images', 'detection_parameters', name_target + '.json'
@@ -71,7 +71,7 @@ class ParameterTuner:
 
         if total_error <= self.threshold_errors and total_error != -1:
             print("Optimal parameters found: \n" + str(params) + "\nWith total error: " + str(total_error))
-            self._save_params(params)
+            self._save_params(params, self.name_target)
             stop_flag.value = True
 
         return total_error, params
@@ -118,4 +118,4 @@ if __name__ == "__main__":
         print("Model found nothing")
     elif best_params is not None:
         print("Best parameters found: \n" + str(best_params) + "\nWith total error: " + str(best_total_error))
-        ParameterTuner._save_params(best_params, move_to_configs=True, name_target=TARGET.NAME_TARGET)
+        ParameterTuner._save_params(best_params, TARGET.NAME_TARGET, move_to_configs=True)
