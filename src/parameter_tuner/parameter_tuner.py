@@ -1,3 +1,4 @@
+import os
 from multiprocessing import Pool, Manager, cpu_count
 from sklearn.model_selection import ParameterGrid
 import json
@@ -22,10 +23,16 @@ class ParameterTuner:
     @staticmethod
     def _save_params(params, move_to_configs=False, name_target=None):
         if params is not None:
-            with open('parameter_tuner/temporary_params/params_tuner-' + str(datetime.now()) + '.json', 'w') as f:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            file_path = os.path.join(current_dir, 'temporary_params', 'params_tuner-' + str(datetime.now()) + '.json')
+            with open(file_path, 'w') as f:
                 json.dump(params, f, indent=4)
             if move_to_configs and name_target is not None:
-                with open('../configs/json/images/detection_parameters/' + name_target + '.json', 'w') as f:
+                two_levels_up_current_dir = os.path.dirname(os.path.dirname(current_dir))
+                file_path = os.path.join(
+                    two_levels_up_current_dir, 'configs', 'json', 'images', 'detection_parameters', name_target + '.json'
+                )
+                with open(file_path, 'w') as f:
                     json.dump(params, f, indent=4)
 
     def evaluate_single_param(self, params, test_data, stop_flag):
