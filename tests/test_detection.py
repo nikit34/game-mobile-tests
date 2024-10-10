@@ -1,8 +1,8 @@
 import pytest
 from src.app.components.field_component import FieldComponent
 from src.app.elements.ernie_element import ErnieElement
-from src.image import Image
-from src.image_detector import ImageDetector
+from src.image.image import Image
+from src.image.image_detector import ImageDetector
 from tests.test_base import TestBase
 
 

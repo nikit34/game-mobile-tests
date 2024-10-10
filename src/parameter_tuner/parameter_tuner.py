@@ -4,8 +4,8 @@ from sklearn.model_selection import ParameterGrid
 import json
 from datetime import datetime
 from src.file_manager import FileManager
-from src.image import Image
-from src.image_detector import ImageDetector
+from src.image.image import Image
+from src.image.image_detector import ImageDetector
 from src.parameter_tuner.targets.ernie import ErnieTarget
 
 

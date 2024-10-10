@@ -6,7 +6,7 @@ class TestBase:
     @classmethod
     def setup_class(cls):
         file_manager = FileManager()
-        file_manager.remove("temporary_images")
+        file_manager.remove("image/tmp_images")
 
         cls.tolerance = ImagesCheckerConfig.get_tolerance()
 

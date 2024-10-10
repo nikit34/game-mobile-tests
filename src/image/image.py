@@ -55,6 +55,6 @@ class Image(FileManager):
     def save(self, name_image):
         if self.cv_image is None:
             raise ValueError("No image loaded to save")
-        full_path = str(os.path.join(self.current_dir, "temporary_images/", name_image + "-" + str(datetime.now()) + ".png"))
+        full_path = str(os.path.join(self.current_dir, "image", "tmp_images", name_image + "-" + str(datetime.now()) + ".png"))
         cv2.imwrite(full_path, self.cv_image)
 

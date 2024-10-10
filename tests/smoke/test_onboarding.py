@@ -7,9 +7,9 @@ from src.app.elements.ernie_element import ErnieElement
 from src.app.screens.onboarding.components.game_center_component import GameCenterComponent
 from src.app.elements.system_dialog_btn_element import SystemDialogBtnElement
 from src.environment_manager import EnvironmentManager
-from src.image import Image
-from src.image_detector import ImageDetector
-from src.screenshot import Screenshot
+from src.image.image import Image
+from src.image.image_detector import ImageDetector
+from src.image.screenshot import Screenshot
 from tests.test_base import TestBase
 from tests.conftest import driver, appium_service
 
