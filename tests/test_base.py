@@ -1,12 +1,12 @@
 from configs.images.checker_config import ImagesCheckerConfig
-from src.files_manager import FilesManager
+from src.file_manager import FileManager
 
 
 class TestBase:
     @classmethod
     def setup_class(cls):
-        files_manager = FilesManager()
-        files_manager.remove("temporary_images")
+        file_manager = FileManager()
+        file_manager.remove("temporary_images")
 
         cls.tolerance = ImagesCheckerConfig.get_tolerance()
 

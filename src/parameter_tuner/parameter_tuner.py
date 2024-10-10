@@ -3,7 +3,7 @@ from multiprocessing import Pool, Manager, cpu_count
 from sklearn.model_selection import ParameterGrid
 import json
 from datetime import datetime
-from src.files_manager import FilesManager
+from src.file_manager import FileManager
 from src.image import Image
 from src.image_detector import ImageDetector
 from src.parameter_tuner.targets.ernie import ErnieTarget
@@ -99,8 +99,8 @@ class ParameterTuner:
 if __name__ == "__main__":
     TARGET = ErnieTarget
 
-    files_manager = FilesManager()
-    files_manager.remove("parameter_tuner/temporary_params")
+    file_manager = FileManager()
+    file_manager.remove("parameter_tuner/temporary_params")
 
     tuner = ParameterTuner(ImageDetector, TARGET.NAME_TARGET, TARGET.PARAM_GRID, TARGET.ERROR_CALLBACK, TARGET.THRESHOLD_ERRORS)
     best_params, best_total_error = tuner.evaluate(TARGET.TEST_DATA)

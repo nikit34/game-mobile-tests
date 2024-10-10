@@ -1,7 +1,7 @@
 import os
 
 
-class FilesManager:
+class FileManager:
     def __init__(self):
         self.current_dir = os.path.dirname(os.path.abspath(__file__))
 
