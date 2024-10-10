@@ -1,5 +1,5 @@
 from src.app.elements.ernie_element import ErnieElement
-from tests.parameter_tuner.feedbacks import feedback_cluster_within_bounds
+from src.parameter_tuner.feedbacks import feedback_cluster_within_bounds
 
 
 class ErnieTarget:

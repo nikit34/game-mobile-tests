@@ -5,8 +5,7 @@ from datetime import datetime
 from src.files_manager import FilesManager
 from src.image import Image
 from src.image_detector import ImageDetector
-from tests.parameter_tuner.targets.empty_field import EmptyFieldTarget
-from tests.parameter_tuner.targets.ernie import ErnieTarget
+from src.parameter_tuner.targets.ernie import ErnieTarget
 
 
 class ParameterTuner:
@@ -23,7 +22,7 @@ class ParameterTuner:
     @staticmethod
     def _save_params(params, move_to_configs=False, name_target=None):
         if params is not None:
-            with open('params_tuner/params_tuner-' + str(datetime.now()) + '.json', 'w') as f:
+            with open('parameter_tuner/temporary_params/params_tuner-' + str(datetime.now()) + '.json', 'w') as f:
                 json.dump(params, f, indent=4)
             if move_to_configs and name_target is not None:
                 with open('../configs/json/images/detection_parameters/' + name_target + '.json', 'w') as f:
@@ -94,7 +93,7 @@ if __name__ == "__main__":
     TARGET = ErnieTarget
 
     files_manager = FilesManager()
-    files_manager.remove("params_tuner")
+    files_manager.remove("parameter_tuner/temporary_params")
 
     tuner = ParameterTuner(ImageDetector, TARGET.NAME_TARGET, TARGET.PARAM_GRID, TARGET.ERROR_CALLBACK, TARGET.THRESHOLD_ERRORS)
     best_params, best_total_error = tuner.evaluate(TARGET.TEST_DATA)

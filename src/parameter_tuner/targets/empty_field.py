@@ -1,5 +1,5 @@
 from src.app.components.field_component import FieldComponent
-from tests.parameter_tuner.feedbacks import feedback_cluster_within_bounds
+from src.parameter_tuner.feedbacks import feedback_cluster_within_bounds
 
 
 class EmptyFieldTarget:
