@@ -7,12 +7,12 @@ class WheatFieldTarget:
 
     TEST_DATA = (
         {
-            "original_img": "app/screens/polygons/img/wheat_field_0.png",
+            "original_img": "app/screens/polygons/img/wheat_fields_0.png",
             "template_img": "app/screens/polygons/components/field/elements/img/wheat_field_1.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         },
         {
-            "original_img": "app/screens/polygons/img/wheat_field_0.png",
+            "original_img": "app/screens/polygons/img/wheat_fields_0.png",
             "template_img": "app/screens/polygons/components/field/elements/img/wheat_field_2.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         }
