@@ -37,7 +37,7 @@ class TestOnboarding(TestBase):
             self.check_clusters(detected_clusters, expected_clusters)
             return detected_clusters
 
-        wait_load_clusters(
+        empty_field_detected_clusters = wait_load_clusters(
             screenshot,
             "app/elements/img/empty_field_element_1.png",
             "empty_field",
@@ -52,7 +52,7 @@ class TestOnboarding(TestBase):
         )
 
         ErnieElement(driver).click(ernie_detected_clusters)
-        FieldComponent(driver).click(FieldComponent.COORDINATES_FIELD_1[0])
+        FieldComponent(driver).click(empty_field_detected_clusters)
 
         wheat_detected_clusters = wait_load_clusters(
             screenshot,
@@ -60,6 +60,7 @@ class TestOnboarding(TestBase):
             "wheat",
             WheatElement.COORDINATES_WHEAT
         )
+        WheatElement.drag_and_drop(wheat_detected_clusters, empty_field_detected_clusters)
 
 
 
