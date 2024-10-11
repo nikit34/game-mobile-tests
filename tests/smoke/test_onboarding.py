@@ -1,6 +1,6 @@
 from pytest import mark
 
-from src.app.components.field_component import FieldComponent
+from src.app.screens.polygons.components.field.field import FieldComponent
 from src.app.elements.ernie import ErnieElement
 from src.app.elements.wheat import WheatElement
 from src.app.screens.onboarding.components.game_center import GameCenterComponent

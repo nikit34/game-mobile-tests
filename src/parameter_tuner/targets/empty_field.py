@@ -1,4 +1,4 @@
-from src.app.components.field_component import FieldComponent
+from src.app.screens.polygons.components.field.field import FieldComponent
 from src.parameter_tuner.feedbacks import feedback_cluster_within_bounds
 
 
