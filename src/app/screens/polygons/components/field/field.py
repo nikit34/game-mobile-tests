@@ -1,4 +1,4 @@
-from src._base_elements._base_opencv_element import BaseOpencvElement
+from src.base_elements.base_opencv_element import BaseOpencvElement
 
 
 class FieldComponent(BaseOpencvElement):
