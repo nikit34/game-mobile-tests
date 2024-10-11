@@ -7,7 +7,7 @@ class WheatTarget:
 
     TEST_DATA = [
         {
-            "original_img": "app/screens/polygons/wheat_0.png",
+            "original_img": "app/screens/polygons/img/wheat_0.png",
             "template_img": "app/elements/img/wheat.png",
             "expected_clusters": WheatElement.COORDINATES_WHEAT
         }
