@@ -50,6 +50,11 @@ class TestOnboarding(TestBase):
         )
         WheatElement(driver).drag_and_drop(wheat_detected_clusters, empty_field_detected_clusters)
 
-
+        self.wait_load_clusters(
+            screenshot,
+            "app/screens/polygons/components/field/elements/img/wheat_field_1.png",
+            "wheat",
+            FieldComponent.COORDINATES_FIELD_1
+        )
 
 
