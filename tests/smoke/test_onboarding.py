@@ -48,7 +48,7 @@ class TestOnboarding(TestBase):
             "wheat",
             WheatElement.COORDINATES_WHEAT
         )
-        WheatElement.drag_and_drop(wheat_detected_clusters, empty_field_detected_clusters)
+        WheatElement(driver).drag_and_drop(wheat_detected_clusters, empty_field_detected_clusters)
 
 
 
