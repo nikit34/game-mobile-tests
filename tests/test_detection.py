@@ -6,8 +6,7 @@ from tests.test_data.detection import TEST_DATA
 
 
 class TestDetection(TestBase):
-    @pytest.mark.parametrize(
-        "name_target, original_image_path, field_image_path, expected_clusters", TEST_DATA)
+    @pytest.mark.parametrize("name_target, original_image_path, field_image_path, expected_clusters", TEST_DATA)
     def test_count_clusters(self, name_target, original_image_path, field_image_path, expected_clusters):
         image_detector = ImageDetector(name_target)
         original_img = Image(path_image=original_image_path, resize_image=True)
