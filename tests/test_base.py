@@ -4,6 +4,8 @@ import time
 from configs.images.checker_config import ImagesCheckerConfig
 from configs.waiting_config import WaitingConfig
 from src.file_manager import FileManager
+from src.image.image import Image
+from src.image.image_detector import ImageDetector
 
 
 class TestBase:
@@ -54,4 +56,14 @@ class TestBase:
                 raise TimeoutError("Function " + func.__name__ + " did not complete in " + str(timeout) + " seconds")
             return wrapper
         return decorator
+
+    @wait_load()
+    def wait_load_clusters(self, screenshot, template_path_img, name_target, expected_clusters):
+        screenshot_img = screenshot.get_screenshot()
+        original_img = Image(image=screenshot_img, resize_image=True)
+        template_img = Image(path_image=template_path_img)
+        image_detector = ImageDetector(name_target)
+        detected_clusters = image_detector.get_coordinates_objects(original_img, template_img)
+        self.check_clusters(detected_clusters, expected_clusters)
+        return detected_clusters
 
