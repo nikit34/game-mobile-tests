@@ -1,9 +1,8 @@
-from time import sleep
-
 from pytest import mark
 
 from src.app.components.field_component import FieldComponent
 from src.app.elements.ernie_element import ErnieElement
+from src.app.elements.wheat_element import WheatElement
 from src.app.screens.onboarding.components.game_center_component import GameCenterComponent
 from src.app.elements.system_dialog_btn_element import SystemDialogBtnElement
 from src.environment_manager import EnvironmentManager
@@ -54,8 +53,13 @@ class TestOnboarding(TestBase):
 
         ErnieElement(driver).click(ernie_detected_clusters)
         FieldComponent(driver).click(FieldComponent.COORDINATES_FIELD_1[0])
-        sleep(2)
-        screenshot.save('test')
+
+        wheat_detected_clusters = wait_load_clusters(
+            screenshot,
+            "app/elements/img/wheat_element.png",
+            "wheat",
+            WheatElement.COORDINATES_WHEAT
+        )
 
 
 
