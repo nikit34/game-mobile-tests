@@ -41,8 +41,7 @@ class TestBase:
                                      "detected_clusters_sorted=" + str(detected_clusters_sorted) + "\n" +
                                      "expected_clusters_sorted=" + str(expected_clusters_sorted))
 
-    @staticmethod
-    def wait_load(timeout=WaitingConfig.get_implicitly_timeout()):
+    def wait_load(self, timeout=WaitingConfig.get_implicitly_timeout()):
         def decorator(func):
             @functools.wraps(func)
             def wrapper(*args, **kwargs):
@@ -57,7 +56,7 @@ class TestBase:
             return wrapper
         return decorator
 
-    @wait_load()
+    @wait_load
     def wait_load_clusters(self, screenshot, template_path_img, name_target, expected_clusters):
         screenshot_img = screenshot.get_screenshot()
         original_img = Image(image=screenshot_img, resize_image=True)
