@@ -8,52 +8,52 @@ class EmptyFieldTarget:
     TEST_DATA = (
         {
             "original_img": "app/screens/polygons/empty_fields_ernie_0.png",
-            "template_img": "app/elements/img/empty_field_element_1.png",
+            "template_img": "app/screens/polygons/components/field/elements/img/empty_field_1.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         },
         {
             "original_img": "app/screens/polygons/empty_fields_ernie_1.png",
-            "template_img": "app/elements/img/empty_field_element_1.png",
+            "template_img": "app/screens/polygons/components/field/elements/img/empty_field_1.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         },
         {
             "original_img": "app/screens/polygons/empty_fields_ernie_2.png",
-            "template_img": "app/elements/img/empty_field_element_1.png",
+            "template_img": "app/screens/polygons/components/field/elements/img/empty_field_1.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         },
         {
             "original_img": "app/screens/polygons/empty_fields_ernie_3.png",
-            "template_img": "app/elements/img/empty_field_element_1.png",
+            "template_img": "app/screens/polygons/components/field/elements/img/empty_field_1.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         },
         {
             "original_img": "app/screens/polygons/empty_fields_ernie_4.png",
-            "template_img": "app/elements/img/empty_field_element_1.png",
+            "template_img": "app/screens/polygons/components/field/elements/img/empty_field_1.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_1
         },
         {
             "original_img": "app/screens/polygons/empty_fields_ernie_0.png",
-            "template_img": "app/elements/img/empty_field_element_2.png",
+            "template_img": "app/screens/polygons/components/field/elements/img/empty_field_2.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_2
         },
         {
             "original_img": "app/screens/polygons/empty_fields_ernie_1.png",
-            "template_img": "app/elements/img/empty_field_element_2.png",
+            "template_img": "app/screens/polygons/components/field/elements/img/empty_field_2.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_2
         },
         {
             "original_img": "app/screens/polygons/empty_fields_ernie_2.png",
-            "template_img": "app/elements/img/empty_field_element_2.png",
+            "template_img": "app/screens/polygons/components/field/elements/img/empty_field_2.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_2
         },
         {
             "original_img": "app/screens/polygons/empty_fields_ernie_3.png",
-            "template_img": "app/elements/img/empty_field_element_2.png",
+            "template_img": "app/screens/polygons/components/field/elements/img/empty_field_2.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_2
         },
         {
             "original_img": "app/screens/polygons/empty_fields_ernie_4.png",
-            "template_img": "app/elements/img/empty_field_element_2.png",
+            "template_img": "app/screens/polygons/components/field/elements/img/empty_field_2.png",
             "expected_clusters": FieldComponent.COORDINATES_FIELD_2
         }
     )

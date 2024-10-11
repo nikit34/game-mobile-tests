@@ -27,14 +27,14 @@ class TestOnboarding(TestBase):
 
         empty_field_detected_clusters = self.wait_load_clusters(
             screenshot,
-            "app/elements/img/empty_field_element_1.png",
+            "app/screens/polygons/components/field/elements/img/empty_field_1.png",
             "empty_field",
             FieldComponent.COORDINATES_FIELD_1
         )
 
         ernie_detected_clusters = self.wait_load_clusters(
             screenshot,
-            "app/elements/img/ernie_element.png",
+            "app/elements/img/ernie.png",
             "ernie",
             ErnieElement.COORDINATES_ERNIE
         )
@@ -44,7 +44,7 @@ class TestOnboarding(TestBase):
 
         wheat_detected_clusters = self.wait_load_clusters(
             screenshot,
-            "app/elements/img/wheat_element.png",
+            "app/elements/img/wheat.png",
             "wheat",
             WheatElement.COORDINATES_WHEAT
         )
