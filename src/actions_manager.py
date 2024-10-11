@@ -49,3 +49,8 @@ class ActionsManager:
 
         self.driver.swipe(start_x, start_y, end_x, end_y, self.duration)
         return self
+
+    def drag_and_drop(self, start_x, start_y, end_x, end_y):
+        self.driver.flick(start_x, start_y, end_x, end_y)
+        return self
+
