@@ -1,4 +1,4 @@
-from src.app.elements.wheat_element import WheatElement
+from src.app.elements.wheat import WheatElement
 from src.parameter_tuner.feedbacks import feedback_cluster_within_bounds
 
 

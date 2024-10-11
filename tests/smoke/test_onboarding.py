@@ -1,10 +1,10 @@
 from pytest import mark
 
 from src.app.components.field_component import FieldComponent
-from src.app.elements.ernie_element import ErnieElement
-from src.app.elements.wheat_element import WheatElement
+from src.app.elements.ernie import ErnieElement
+from src.app.elements.wheat import WheatElement
 from src.app.screens.onboarding.components.game_center import GameCenterComponent
-from src.app.elements.system_dialog_btn_element import SystemDialogBtnElement
+from src.app.elements.system_dialog_btn import SystemDialogBtnElement
 from src.environment_manager import EnvironmentManager
 from src.image.screenshot import Screenshot
 from tests.test_base import TestBase

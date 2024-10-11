@@ -1,6 +1,6 @@
 from src.app.components.field_component import FieldComponent
-from src.app.elements.ernie_element import ErnieElement
-from src.app.elements.wheat_element import WheatElement
+from src.app.elements.ernie import ErnieElement
+from src.app.elements.wheat import WheatElement
 
 TEST_DATA = [
     ("empty_field", "app/screens/polygons/empty_fields_ernie_0.png", "app/elements/img/empty_field_element_1.png", FieldComponent.COORDINATES_FIELD_1),
