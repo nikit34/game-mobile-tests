@@ -1,7 +1,7 @@
 from appium.webdriver.common.appiumby import AppiumBy
 
 from configs.desired_caps_config import DesiredCapsConfig
-from src.app.elements._base_elements._multiple_base_selenium_elements import BaseSeleniumElements
+from src._base_elements._multiple_base_selenium_elements import BaseSeleniumElements
 from src.environment_manager import EnvironmentManager
 
 

@@ -1,6 +1,6 @@
 from selenium.common import NoSuchElementException
 
-from src.app.elements._base_elements._base_selenium_element import BaseSeleniumElement
+from src._base_elements._base_selenium_element import BaseSeleniumElement
 
 
 class BaseSeleniumElements(BaseSeleniumElement):
