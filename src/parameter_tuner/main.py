@@ -12,6 +12,7 @@ from src.image.image_detector import ImageDetector
 from src.parameter_tuner.targets.ernie import ErnieTarget
 from src.parameter_tuner.targets.empty_field import EmptyFieldTarget
 from src.parameter_tuner.targets.wheat import WheatTarget
+from src.parameter_tuner.targets.wheat_field import WheatFieldTarget
 
 
 class ParameterTuner:
